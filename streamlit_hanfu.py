@@ -385,6 +385,21 @@ def hanfu_recognition_module():
         else:
             st.info("请上传汉服图片以获取文化解读", icon="📖")
         st.markdown('</div>', unsafe_allow_html=True)
+
+# 初始化会话状态
+def init_session_state():
+    if 'app_initialized' not in st.session_state:
+        st.session_state.app_initialized = True
+        st.session_state.current_step = 1
+        st.session_state.selected_hanfu = []
+        st.session_state.user_ratings = {}
+        st.session_state.recommendations = []
+        st.session_state.rec_ratings = {}
+        st.session_state.rating_range = (1, 5)
+        st.session_state.satisfaction = None
+        st.session_state.current_module = None
+        st.session_state.button_states = {}  # 用于存储按钮点击状态
+
 # 显示随机汉服并收集评分
 def display_random_hanfu():
     global hanfu_df
