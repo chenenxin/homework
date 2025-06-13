@@ -130,15 +130,15 @@ st.markdown("""
     [data-testid="stSidebar"] button.stButton:active {
         background-image: linear-gradient(145deg, #bcaa90, #a89880);
     }
-        /* 已点击按钮的特殊样式 */
+    
+    
+    /* 已点击按钮的特殊样式 */
     button.stButton.clicked {
         background-image: linear-gradient(145deg, #8c6845, #6b4e33);
         box-shadow: inset 2px 2px 5px rgba(107, 62, 0, 0.5);
         transform: translateY(1px);
         color: #f8f3e9;
     }
-    
-
     
 
 /* 表单提交按钮 */
