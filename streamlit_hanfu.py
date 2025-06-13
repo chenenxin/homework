@@ -423,14 +423,15 @@ def hanfu_display_module():
     
     if status == '女':
         try:
-            Image1 = Image.open('曲裾.jpg')
-            Image2 = Image.open('直裾.jpg')
-            Image6 = Image.open('圆领袍.jpg')
-            Image4 = Image.open('齐胸襦裙.jpg')
-            Image5 = Image.open('齐腰襦裙.jpg')
-            Image3 = Image.open('马面裙.jpg')
-            Image7 = Image.open('袄裙.jpg')
-            Image8 = Image.open('褙子.jpg')
+                    # 确保图像文件存在于给定的路径中
+            Image1 = Image.open('display/曲裾.jpg')
+            Image2 = Image.open('display/直裾.jpg')
+            Image6 = Image.open('display/圆领袍.jpg')
+            Image4 = Image.open('display/齐胸襦裙.jpg')
+            Image5 = Image.open('display/齐腰襦裙.jpg')
+            Image3 = Image.open('display/马面裙.jpg')
+            Image7 = Image.open('display/袄裙.jpg')
+            Image8 = Image.open('display/褙子.jpg')
             
             st.markdown("### 女性汉服款式")
             row1 = st.columns(4)
