@@ -139,99 +139,157 @@ st.markdown("""
         color: #f8f3e9;
     }
     
-    /* 表单提交按钮 */
-    button[data-testid="stFormSubmitButton"] {
-        background-color: #a67c52;
-        background-image: linear-gradient(145deg, #a67c52, #8c6845);
-        font-weight: bold;
-    }
-    
-    button[data-testid="stFormSubmitButton"]:hover {
-        background-image: linear-gradient(145deg, #bf956b, #a67c52);
-    }
-    
-    button[data-testid="stFormSubmitButton"]:active {
-        background-image: linear-gradient(145deg, #8c6845, #6b4e33);
-    }
-    
-    /* 评分按钮 */
-    div[data-testid="stRadio"] > div {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-    }
-    
-    div[data-testid="stRadio"] label {
-        background-color: #f5f0e1;
-        border: 1px solid #d4c4a6;
-        border-radius: 4px;
-        padding: 6px 12px;
-        transition: all 0.2s;
-        cursor: pointer;
-    }
-    
-    div[data-testid="stRadio"] label:hover {
-        background-color: #e8dcc3;
-    }
-    
-    div[data-testid="stRadio"] input:checked + label {
-        background-color: #a67c52;
-        color: white;
-        border-color: #8c6845;
-    }
-    
-    /* 评分滑块容器样式 */
-    .rating-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    
-    /* 评分范围标签样式 */
-    .rating-labels {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        margin-bottom: 10px;
-        font-size: 0.9em;
-        color: #6b3e00;
-    }
-    
-    /* 滑块样式 */
-    div.stSlider {
-        width: 50%;
-    }
-    
-    div.stSlider > div[data-baseweb="slider"] > div {
-        height: 8px;
-        background-color: #eee;
-        border-radius: 4px;
-    }
-    
-    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"] {
-        background-color: #6b3e00;
-        border: none;
-        width: 20px;
-        height: 20px;
-        margin-top: -6px;
-        border-radius: 50%;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        transition: all 0.2s;
-    }
-    
-    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]:focus {
-        box-shadow: 0 0 0 2px rgba(107, 62, 0, 0.2);
-        outline: none;
-    }
-    
+/* 表单提交按钮 */
+button[data-testid="stFormSubmitButton"] {
+    background-color: #a67c52;
+    background-image: linear-gradient(145deg, #a67c52, #8c6845);
+    font-weight: bold;
+}
 
-    
-    /* 拖动时显示评分值 */
-    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"].dragging::after {
-        content: attr(aria-valuenow) "分";
-        opacity: 1;
-    }
+button[data-testid="stFormSubmitButton"]:hover {
+    background-image: linear-gradient(145deg, #bf956b, #a67c52);
+}
+
+button[data-testid="stFormSubmitButton"]:active {
+    background-image: linear-gradient(145deg, #8c6845, #6b4e33);
+}
+
+/* 评分按钮 */
+div[data-testid="stRadio"] > div {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+div[data-testid="stRadio"] label {
+    background-color: #f5f0e1;
+    border: 1px solid #d4c4a6;
+    border-radius: 4px;
+    padding: 6px 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+div[data-testid="stRadio"] label:hover {
+    background-color: #e8dcc3;
+}
+
+div[data-testid="stRadio"] input:checked + label {
+    background-color: #a67c52;
+    color: white;
+    border-color: #8c6845;
+}
+
+/* 评分滑块容器样式 */
+.rating-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 评分范围标签样式 */
+.rating-labels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    color: #6b3e00;
+}
+
+/* 滑块样式 */
+div.stSlider {
+    width: 100%;
+}
+
+div.stSlider > div[data-baseweb="slider"] > div {
+    height: 8px;
+    background-color: #eee;
+    border-radius: 4px;
+}
+
+div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"] {
+    background-color: #6b3e00;
+    border: none;
+    width: 20px;
+    height: 20px;
+    margin-top: -6px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.2s;
+}
+
+div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]:focus {
+    box-shadow: 0 0 0 2px rgba(107, 62, 0, 0.2);
+    outline: none;
+}
+
+/* 评分值显示（默认隐藏） */
+div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]::after {
+    content: "";
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.85em;
+    color: #6b3e00;
+    background-color: #fff;
+    padding: 2px 6px;
+    border: 1px solid #6b3e00;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/* 拖动时显示评分值 */
+div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"].dragging::after {
+    content: attr(aria-valuenow) "分";
+    opacity: 1;
+}
+
+/* 进度条样式统一控制 */
+div[data-testid="stProgressBar"] {
+    /* 固定宽度，确保所有进度条宽度一致 */
+    width: 100%;
+    /* 设置最大宽度，防止在大屏幕上过度拉伸 */
+    max-width: 500px;
+    /* 居中显示 */
+    margin: 15px auto;
+    /* 固定高度 */
+    height: 24px;
+    /* 添加外边框，使进度条更明显 */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    /* 确保进度条位置一致 */
+    position: relative;
+}
+
+/* 进度条内部填充 */
+div[data-testid="stProgressBar"] > div {
+    /* 使用绝对定位确保进度条内部填充位置一致 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    /* 使用相同的渐变颜色，与现有设计风格一致 */
+    background-color: #a67c52;
+    background-image: linear-gradient(145deg, #a67c52, #8c6845);
+    border-radius: 4px;
+    /* 添加平滑过渡效果 */
+    transition: width 0.3s ease;
+}
+
+/* 进度条标签 */
+div[data-testid="stProgressBar"] + div {
+    /* 固定标签位置 */
+    margin-top: 5px;
+    text-align: center;
+    font-size: 0.85em;
+    color: #6b3e00;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
