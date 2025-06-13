@@ -63,6 +63,86 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# 自定义CSS样式
+st.markdown("""
+<style>
+    /* 其他样式保留不变 */
+
+    /* 按钮基础样式 */
+    .stButton>button {
+        background: linear-gradient(145deg, #e6d2b0, #d4c4a6);
+        color: #6b3e00;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        padding: 10px 16px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(107, 62, 0, 0.2);
+        margin: 5px;
+    }
+
+    /* 按钮悬停效果 */
+    .stButton>button:hover {
+        background: linear-gradient(145deg, #d4c4a6, #c0b096);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(107, 62, 0, 0.2);
+    }
+
+    /* 按钮点击效果（已激活状态） */
+    .stButton>button:active,
+    .stButton>button[data-baseweb="tab"]:focus {
+        background: linear-gradient(145deg, #a67c52, #8b6435);
+        color: white;
+        transform: translateY(0);
+        box-shadow: 0 2px 5px rgba(107, 62, 0, 0.3);
+    }
+
+    /* 主按钮样式（如提交、获取推荐等） */
+    .stButton[onclick^="get_recommendations"]>button,
+    .stButton[onclick^="calculate_satisfaction"]>button {
+        background: linear-gradient(145deg, #d4a976, #c49660);
+        color: white;
+    }
+
+    /* 主按钮悬停效果 */
+    .stButton[onclick^="get_recommendations"]>button:hover,
+    .stButton[onclick^="calculate_satisfaction"]>button:hover {
+        background: linear-gradient(145deg, #c49660, #b48650);
+        box-shadow: 0 4px 8px rgba(107, 62, 0, 0.3);
+    }
+
+    /* 主按钮点击效果 */
+    .stButton[onclick^="get_recommendations"]>button:active,
+    .stButton[onclick^="calculate_satisfaction"]>button:active {
+        background: linear-gradient(145deg, #8b6435, #72532d);
+        box-shadow: 0 2px 5px rgba(107, 62, 0, 0.4);
+    }
+
+    /* 卡片中的按钮（如评分按钮） */
+    .stRadio {
+        margin: 10px 0;
+    }
+
+    /* 表单提交按钮 */
+    .stForm>div>div:last-child>div>div>button {
+        background: linear-gradient(145deg, #d4a976, #c49660);
+        color: white;
+        width: 100%;
+    }
+
+    .stForm>div>div:last-child>div>div>button:hover {
+        background: linear-gradient(145deg, #c49660, #b48650);
+    }
+
+    .stForm>div>div:last-child>div>div>button:active {
+        background: linear-gradient(145deg, #8b6435, #72532d);
+    }
+</style>
+""", unsafe_allow_html=True)
+
+
 # Python 版本检查
 if sys.version_info >= (3, 13):
     st.error("⚠️ 当前 Python 版本为 3.13+，可能与 fastai 不兼容。建议使用 Python 3.11。")
@@ -414,7 +494,7 @@ def display_satisfaction():
 def hanfu_display_module():
     st.markdown('<h1 style="text-align:center; font-size:2.5em; color: #6b3e00; font-weight:bold;">汉服款式展示</h1>', unsafe_allow_html=True)
     
-    status = st.selectbox("请选择查看性别", ('女', '男'))
+    status = st.selectbox("请选择性别", ('女', '男'))
     
     if status == '女':
         # 示例图片路径（请替换为实际路径）
