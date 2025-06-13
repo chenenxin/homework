@@ -248,6 +248,51 @@ st.markdown("""
         content: attr(aria-valuenow) "分";
         opacity: 1;
     }
+    
+    /* 新增进度条样式 */
+    .progress-container {
+        width: 100%;
+        background-color: #f3f3f3;
+        border-radius: 20px;
+        margin: 15px 0;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    
+    .progress-bar {
+        height: 25px;
+        background-color: #a67c52;
+        background-image: linear-gradient(145deg, #a67c52, #8c6845);
+        width: 0%;
+        border-radius: 20px;
+        text-align: center;
+        line-height: 25px;
+        color: white;
+        font-weight: bold;
+        transition: width 0.5s ease;
+    }
+    
+    /* 多进度条布局 */
+    .progress-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+    }
+    
+    .progress-item {
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .progress-title {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #6b3e00;
+        margin-bottom: 8px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -311,6 +356,40 @@ st.markdown("""
                 sliders.forEach(s => s.classList.remove('dragging'));
             });
         });
+        
+        // 进度条更新函数
+        function updateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const targetWidth = bar.getAttribute('data-target');
+                bar.style.width = targetWidth + '%';
+                bar.textContent = targetWidth + '%';
+            });
+        }
+        
+        // 初始化进度条
+        updateProgressBars();
+        
+        // 监听DOM变化，确保新添加的进度条也能被更新
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length) {
+                    const newProgressBars = Array.from(mutation.addedNodes)
+                        .filter(node => node instanceof Element)
+                        .map(node => node.querySelectorAll('.progress-bar'))
+                        .flat();
+                    
+                    if (newProgressBars.length) {
+                        updateProgressBars();
+                    }
+                }
+            });
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     });
 </script>
 """, unsafe_allow_html=True)
@@ -353,6 +432,36 @@ def resize_image(image, max_width=400):
         return image.resize((max_width, new_height), Image.LANCZOS)
     return image
 
+# 创建进度条组件
+def create_progress_bar(progress, title="进度", description="", key=None):
+    """创建一个美观的进度条组件"""
+    key = key or f"progress_{hash(title + description)}"
+    
+    st.markdown(f"""
+    <div class="progress-item" key="{key}">
+        <div class="progress-title">{title}</div>
+        {f'<div class="progress-description">{description}</div>' if description else ''}
+        <div class="progress-container">
+            <div class="progress-bar" data-target="{progress}">0%</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# 创建多进度条布局
+def create_progress_grid(progress_items, title="进度概览"):
+    """创建一个包含多个进度条的网格布局"""
+    st.markdown(f"<h3 style='color: #6b3e00;'>{title}</h3>", unsafe_allow_html=True)
+    st.markdown("<div class='progress-grid'>", unsafe_allow_html=True)
+    
+    for item in progress_items:
+        create_progress_bar(
+            progress=item.get("progress", 0),
+            title=item.get("title", "进度"),
+            description=item.get("description", "")
+        )
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
 # 汉服识别模块
 def hanfu_recognition_module():
     st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🔎 汉服识别系统</h1>', unsafe_allow_html=True)
@@ -379,8 +488,22 @@ def hanfu_recognition_module():
                 
                 if model:
                     try:
+                        # 显示进度条
+                        create_progress_bar(
+                            progress=50,
+                            title="识别进度",
+                            description="正在分析图片特征..."
+                        )
+                        
                         pred, pred_idx, probs = model.predict(image)
-                        st.markdown(f'<div class="pred-result">预测结果: {pred}; 概率: {probs[pred_idx]:.4f}</div>', unsafe_allow_html=True)
+                        
+                        # 更新进度条
+                        create_progress_bar(
+                            progress=100,
+                            title="识别完成",
+                            description=f"预测结果: {pred}; 概率: {probs[pred_idx]:.4f}"
+                        )
+                        
                         st.session_state.recognition_prediction = pred
                     except Exception as e:
                         st.error(f"识别失败: {str(e)}")
@@ -486,6 +609,11 @@ def init_session_state():
         st.session_state.satisfaction = None
         st.session_state.current_module = None
         st.session_state.button_states = {}  # 用于存储按钮点击状态
+        st.session_state.progress_data = {
+            "rating_completion": 0,
+            "recommendation_progress": 0,
+            "satisfaction_score": 0
+        }
 
 # 显示随机汉服并收集评分
 def display_random_hanfu():
@@ -521,6 +649,13 @@ def display_random_hanfu():
             return
         st.session_state.user_ratings = {}
     st.markdown('<h1 style="text-align:left; color: #6b3e00;">👉🏻请为以下汉服评分</h1>', unsafe_allow_html=True)
+    
+    # 显示总体进度
+    create_progress_bar(
+        progress=33,
+        title="推荐系统进度",
+        description="步骤 1: 评分收集"
+    )
     
     form_key = f"hanfu_rating_form_{hash(tuple(st.session_state.selected_hanfu))}"
     with st.form(key=form_key):
@@ -580,6 +715,9 @@ def display_random_hanfu():
             if len(st.session_state.user_ratings) < len(valid_selected):
                 st.warning("请为所有汉服评分")
             else:
+                # 更新评分完成进度
+                st.session_state.progress_data["rating_completion"] = 100
+                
                 st.success("评分已提交！")
                 st.write("您的评分如下:")
                 for item_id, rating in st.session_state.user_ratings.items():
@@ -588,6 +726,13 @@ def display_random_hanfu():
                     except:
                         name = f"汉服 (ID: {item_id})"
                     st.write(f"{name}: {rating}分")
+                
+                # 更新总体进度
+                create_progress_bar(
+                    progress=66,
+                    title="推荐系统进度",
+                    description="步骤 2: 推荐生成中"
+                )
 
 # 显示推荐结果
 def display_recommendations():
@@ -596,6 +741,14 @@ def display_recommendations():
         st.error("汉服数据异常，无法生成推荐")
         return
     st.header("🎯 个性化推荐")
+    
+    # 显示进度条
+    if not st.session_state.recommendations:
+        create_progress_bar(
+            progress=st.session_state.progress_data["recommendation_progress"],
+            title="推荐生成进度",
+            description="正在分析您的偏好..."
+        )
     
     # 为按钮添加唯一ID以跟踪状态
     button_key = "get_recommendations_button"
@@ -607,6 +760,9 @@ def display_recommendations():
             st.warning("请先为 3 个汉服评分")
             return
         with st.spinner("正在生成推荐..."):
+            # 更新推荐进度
+            st.session_state.progress_data["recommendation_progress"] = 50
+            
             if 'item_id' not in hanfu_df.columns:
                 st.error("汉服数据缺少 item_id 列，无法生成推荐")
                 return
@@ -631,9 +787,37 @@ def display_recommendations():
                 except Exception as e:
                     st.warning(f"处理推荐项 {item_id} 时出错: {e}")
             st.session_state.recommendations = formatted_recs
+            
+            # 更新推荐进度
+            st.session_state.progress_data["recommendation_progress"] = 100
+            
             st.success("推荐生成成功！")
+            
+            # 更新总体进度
+            create_progress_bar(
+                progress=80,
+                title="推荐系统进度",
+                description="步骤 3: 评估推荐结果"
+            )
+    
     if 'recommendations' in st.session_state and st.session_state.recommendations:
         st.subheader("为您推荐汉服")
+        
+        # 创建多进度条布局，显示每个推荐的评分进度
+        progress_items = []
+        for i, rec in enumerate(st.session_state.recommendations):
+            progress = 0
+            if rec['item_id'] in st.session_state.rec_ratings:
+                progress = 100
+            
+            progress_items.append({
+                "title": f"推荐 {i+1}",
+                "progress": progress,
+                "description": f"预测评分: {rec['predicted_rating']:.2f}"
+            })
+        
+        create_progress_grid(progress_items, title="推荐评分进度")
+        
         for idx, rec in enumerate(st.session_state.recommendations):
             try:
                 with st.expander(f"推荐 {idx + 1} - 预测评分: {rec['predicted_rating']:.2f}"):
@@ -674,6 +858,13 @@ def calculate_satisfaction(ratings):
 
 # 显示满意度结果
 def display_satisfaction():
+    # 显示总体进度
+    create_progress_bar(
+        progress=st.session_state.progress_data["satisfaction_score"],
+        title="推荐系统进度",
+        description="步骤 4: 计算满意度"
+    )
+    
     # 为按钮添加唯一ID以跟踪状态
     button_key = "calculate_satisfaction_button"
     if st.button("计算推荐满意度", key=button_key):
@@ -684,7 +875,19 @@ def display_satisfaction():
             st.warning("请先对推荐汉服评分")
             return
         satisfaction = calculate_satisfaction(st.session_state.rec_ratings)
+        
+        # 更新满意度进度
+        st.session_state.progress_data["satisfaction_score"] = satisfaction
+        
         st.header(f"推荐满意度：{satisfaction:.1f}%")
+        
+        # 更新总体进度
+        create_progress_bar(
+            progress=100,
+            title="推荐系统进度",
+            description="完成！感谢您的参与"
+        )
+        
         if satisfaction >= 80:
             st.success("🎉 非常满意！")
         elif satisfaction >= 60:
@@ -784,7 +987,7 @@ def hanfu_display_module():
                 st.markdown('<div style="text-align:center; color: #6b3e00;">圆领袍</div>', unsafe_allow_html=True)
             with row1[3]:
                 st.image(Image7, width=200)
-                st.markdown('<div style="text-align:center; color: #6b3e00;">直裾</div>', unsafe_allow_html=True)
+                st.markdown('<div style="text-align:center; color: #6b3e00<div style="text-align:center; color: #6b3e00;">直裾</div>', unsafe_allow_html=True)
             with row1[4]:
                 st.image(Image9, width=200)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">褙子</div>', unsafe_allow_html=True)
@@ -808,9 +1011,38 @@ def hanfu_display_module():
 
 # 汉服评分与推荐模块
 def hanfu_rating_recommendation_module():
+    # 显示总体进度概览
+    if st.session_state.progress_data["rating_completion"] == 0:
+        create_progress_bar(
+            progress=0,
+            title="推荐系统进度",
+            description="开始评分流程"
+        )
+    
     display_random_hanfu()
     display_recommendations()
     display_satisfaction()
+    
+    # 完成后显示总体满意度
+    if st.session_state.progress_data["satisfaction_score"] > 0:
+        st.markdown("### 推荐流程总结")
+        create_progress_grid([
+            {
+                "title": "评分完成度",
+                "progress": st.session_state.progress_data["rating_completion"],
+                "description": f"{len(st.session_state.user_ratings)}个汉服已评分"
+            },
+            {
+                "title": "推荐质量",
+                "progress": st.session_state.progress_data["satisfaction_score"],
+                "description": f"满意度: {st.session_state.progress_data['satisfaction_score']:.1f}%"
+            },
+            {
+                "title": "总体进度",
+                "progress": 100,
+                "description": "流程已完成"
+            }
+        ], title="推荐系统评估")
 
 # 加载数据
 ratings_df, hanfu_df = load_experiment_data()
@@ -880,8 +1112,15 @@ with st.sidebar:
     # 重新开始按钮
     if st.button("🔄 重新开始"):
         for key in ['selected_hanfu', 'user_ratings', 'recommendations', 
-                   'rec_ratings', 'satisfaction_calculated']:
-            st.session_state[key] = [] if key in ['selected_hanfu', 'recommendations'] else {}
+                   'rec_ratings', 'satisfaction_calculated', 'progress_data']:
+            if key == 'progress_data':
+                st.session_state[key] = {
+                    "rating_completion": 0,
+                    "recommendation_progress": 0,
+                    "satisfaction_score": 0
+                }
+            else:
+                st.session_state[key] = [] if key in ['selected_hanfu', 'recommendations'] else {}
         st.session_state.current_step = 1
         st.rerun()
 
@@ -893,9 +1132,9 @@ if selected_module == "🏠首页":
         <p style="font-size:1.2em;">欢迎使用汉服智能小助手🥳🎉，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</p>
         <p style="font-size:1.2em;">通过侧边栏导航，您可以：</p>
         <ul style="text-align:left; margin-left:20px; font-size:1.1em;">
-            <ul>📍使用汉服识别系统上传图片并获取汉服类型及文化解读</li>
-            <ul>📍通过汉服推荐系统获取个性化汉服推荐</li>
-            <ul>🪩浏览精选汉服</li>
+            <ul>📍使用汉服识别系统上传图片并获取汉服类型及文化解读</ul>
+            <ul>📍通过汉服推荐系统获取个性化汉服推荐</ul>
+            <ul>🪩浏览精选汉服</ul>
         </ul>
     </div>
     """, unsafe_allow_html=True)
