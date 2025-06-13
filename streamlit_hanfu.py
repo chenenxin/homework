@@ -179,38 +179,6 @@ st.markdown("""
         color: white;
         border-color: #8c6845;
     }
-    
-    /* 侧边栏导航图标样式 */
-    .stRadio > div > label {
-        position: relative;
-        padding-left: 25px; /* 为图标留出空间 */
-    }
-    
-    .stRadio > div > label::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.2em;
-        width: 20px;
-        text-align: center;
-    }
-    
-    .stRadio > div > label:nth-child(1)::before { content: "🏠"; }
-    .stRadio > div > label:nth-child(2)::before { content: "🔎"; }
-    .stRadio > div > label:nth-child(3)::before { content: "👗"; }
-    .stRadio > div > label:nth-child(4)::before { content: "🌟"; }
-    
-    .stRadio > div > label > div[data-testid="stMarkdownContainer"] {
-        display: flex;
-        align-items: center;
-    }
-    
-    .stRadio > div > label > div[data-testid="stMarkdownContainer"] > ul {
-        list-style-type: none;
-        padding-left: 0;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -300,6 +268,7 @@ def resize_image(image, max_width=400):
 def hanfu_recognition_module():
     st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🔎 汉服识别系统</h1>', unsafe_allow_html=True)
     col1, col2 = st.columns([1, 1])
+
     with col1:
         st.markdown("""
         <div class="card" style="padding: 10px;">
@@ -405,6 +374,7 @@ def hanfu_recognition_module():
                            褙子，又名背子、绰子、绣䘿，是中国传统服饰的一种，起于隋唐。褙子直领对襟，两侧从腋下起不缝合，多罩在其他衣服外穿着。流行于宋、明两朝。宋朝褙子直领对襟，两腋开叉，衣裾短者及腰，长者过膝。宋朝女性多以褙子内着抹胸为搭配。明朝褙子有宽袖褙子、窄袖褙子两种。
                         </div>
                     """
+
                 }
                 if prediction in interpretations:
                     st.markdown(interpretations[prediction], unsafe_allow_html=True)
@@ -463,6 +433,7 @@ def display_random_hanfu():
             st.error(f"可用汉服数量不足，只有 {len(valid_item_ids)} 个有效汉服")
             return
         st.session_state.user_ratings = {}
+
     st.markdown('<h1 style="text-align:left; color: #6b3e00;">👉🏻请为以下汉服评分</h1>', unsafe_allow_html=True)
     
     form_key = f"hanfu_rating_form_{hash(tuple(st.session_state.selected_hanfu))}"
@@ -540,6 +511,8 @@ def display_random_hanfu():
                 )
                 
                 st.session_state.user_ratings[item_id] = rating
+
+
         submitted = st.form_submit_button("提交评分", type="primary")
         if submitted:
             if len(st.session_state.user_ratings) < len(valid_selected):
@@ -560,6 +533,7 @@ def display_recommendations():
     if hanfu_df is None or not isinstance(hanfu_df, pd.DataFrame):
         st.error("汉服数据异常，无法生成推荐")
         return
+
     st.header("🎯 个性化推荐")
     
     # 为按钮添加唯一ID以跟踪状态
@@ -571,6 +545,7 @@ def display_recommendations():
         if len(st.session_state.user_ratings) < 3:
             st.warning("请先为 3 个汉服评分")
             return
+
         with st.spinner("正在生成推荐..."):
             if 'item_id' not in hanfu_df.columns:
                 st.error("汉服数据缺少 item_id 列，无法生成推荐")
@@ -582,6 +557,7 @@ def display_recommendations():
                 recommendations = random.sample(unrated_items, 5)
             else:
                 recommendations = random.sample(item_ids, min(5, len(item_ids)))
+
             formatted_recs = []
             for item_id in recommendations:
                 try:
@@ -595,8 +571,10 @@ def display_recommendations():
                         })
                 except Exception as e:
                     st.warning(f"处理推荐项 {item_id} 时出错: {e}")
+
             st.session_state.recommendations = formatted_recs
             st.success("推荐生成成功！")
+
     if 'recommendations' in st.session_state and st.session_state.recommendations:
         st.subheader("为您推荐汉服")
         for idx, rec in enumerate(st.session_state.recommendations):
@@ -648,8 +626,10 @@ def display_satisfaction():
         if not st.session_state.rec_ratings:
             st.warning("请先对推荐汉服评分")
             return
+
         satisfaction = calculate_satisfaction(st.session_state.rec_ratings)
         st.header(f"推荐满意度：{satisfaction:.1f}%")
+
         if satisfaction >= 80:
             st.success("🎉 非常满意！")
         elif satisfaction >= 60:
@@ -784,14 +764,16 @@ ratings_df, hanfu_df = load_experiment_data()
 init_session_state()
 
 # 侧边导航栏
+#st.sidebar.title("🌖汉服智能小助手🌔")
+#selected_module = st.sidebar.radio(
+    #"选择模块",
+    #["🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"])
+# 侧边导航栏
 st.sidebar.title("🌖汉服智能小助手🌔")
-
-# 侧边栏导航
 selected_module = st.sidebar.radio(
     "",  # 标题设为空字符串
     [
-        "首页", "汉服识别", "汉服展示", "汉服评分与推荐"
-    ],
+        "🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"],
     label_visibility="collapsed"  # 隐藏标签文本
 )
 
@@ -801,36 +783,37 @@ with st.sidebar:
         st.write(f"📂 收录热门汉服款式总数：{len(hanfu_df)}")
     else:
         st.write("📂 汉服数据加载失败")
+
     if ratings_df is not None:
         st.write(f"⭐ 用户评分总数：{len(ratings_df)}")
     else:
         st.write("⭐ 用户评分数据加载失败")
     
     # 重新开始按钮
-    if st.button("🔄 重新开始"):
+    if st.button("🔄 重新开始"):  # 注意这里改为 st.button
         for key in ['selected_hanfu', 'user_ratings', 'recommendations', 
                    'rec_ratings', 'satisfaction_calculated']:
             st.session_state[key] = [] if key in ['selected_hanfu', 'recommendations'] else {}
         st.session_state.current_step = 1
         st.rerun()
-
 # 显示首页信息
-if selected_module == "首页":
+if selected_module == "🏠首页":
     st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
     st.markdown("""
     <div class="card" style="text-align:left;">
         <p style="font-size:1.2em;">欢迎使用汉服智能小助手🥳🎉，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</p>
         <p style="font-size:1.2em;">通过侧边栏导航，您可以：</p>
         <ul style="text-align:left; margin-left:20px; font-size:1.1em;">
-            <li>📍使用汉服识别系统上传图片并获取汉服类型及文化解读</li>
-            <li>📍通过汉服推荐系统获取个性化汉服推荐</li>
-            <li>🪩浏览精选汉服</li>
+            <ul>📍使用汉服识别系统上传图片并获取汉服类型及文化解读</ul>
+            <ul>📍通过汉服推荐系统获取个性化汉服推荐</ul>
+            <ul>🪩浏览精选汉服</ul>
         </ul>
     </div>
     """, unsafe_allow_html=True)
-elif selected_module == "汉服识别":
+elif selected_module == "🔎汉服识别":
     hanfu_recognition_module()
-elif selected_module == "汉服展示":
+elif selected_module == "👗汉服展示":
     hanfu_display_module()
-elif selected_module == "汉服评分与推荐":
+elif selected_module == "🌟汉服评分与推荐":
     hanfu_rating_recommendation_module()
+
