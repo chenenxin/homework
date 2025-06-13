@@ -386,20 +386,6 @@ def hanfu_recognition_module():
             st.info("请上传汉服图片以获取文化解读", icon="📖")
         st.markdown('</div>', unsafe_allow_html=True)
 
-# 初始化会话状态
-def init_session_state():
-    if 'app_initialized' not in st.session_state:
-        st.session_state.app_initialized = True
-        st.session_state.current_step = 1
-        st.session_state.selected_hanfu = []
-        st.session_state.user_ratings = {}
-        st.session_state.recommendations = []
-        st.session_state.rec_ratings = {}
-        st.session_state.rating_range = (1, 5)
-        st.session_state.satisfaction = None
-        st.session_state.current_module = None
-        st.session_state.button_states = {}  # 用于存储按钮点击状态
-
 # 显示随机汉服并收集评分
 def display_random_hanfu():
     global hanfu_df
@@ -463,39 +449,66 @@ def display_random_hanfu():
             with cols[i]:
                 st.write(f"**{name}**")
                 
-                # 评分范围标签
+                # 评分范围标签（只显示两端）
                 rating_range_html = """
                 <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9em;">
                     <span style="color: #6b3e00;">1分</span>
-                    <span style="color: #6b3e00;">3分</span>
                     <span style="color: #6b3e00;">5分</span>
                 </div>
                 """
                 st.markdown(rating_range_html, unsafe_allow_html=True)
                 
                 # 评分滑块
-                default_value = 5
+                default_value = 3  # 设置默认值为3分，更居中
                 if item_id in st.session_state.user_ratings:
                     default_value = st.session_state.user_ratings[item_id]
                 
                 # 自定义滑块样式
                 st.markdown("""
                 <style>
-                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"] {
+                    /* 隐藏默认的滑块标签 */
+                    div.stSlider > div[data-baseweb="slider"] > div > div > div[data-testid="stTickBar"] {
+                        display: none;
+                    }
+                    
+                    /* 滑块轨道样式 */
+                    div.stSlider > div[data-baseweb="slider"] > div {
+                        height: 8px;
+                        background-color: #eee;
+                        border-radius: 4px;
+                    }
+                    
+                    /* 滑块thumb样式 */
+                    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"] {
                         background-color: #6b3e00;
-                        box-shadow: 0 0 0 1px #6b3e00;
+                        border: none;
+                        width: 20px;
+                        height: 20px;
+                        margin-top: -6px;
+                        border-radius: 50%;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
                     }
-                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]:focus {
-                        box-shadow: 0 0 0 1px #6b3e00, 0 0 0 0.2rem rgba(107, 62, 0, 0.25);
+                    
+                    /* 滑块focus样式 */
+                    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]:focus {
+                        box-shadow: 0 0 0 2px rgba(107, 62, 0, 0.2);
+                        outline: none;
                     }
-                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]::after {
-                        content: attr(aria-valuenow);
+                    
+                    /* 评分值显示在滑块上方 */
+                    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]::after {
+                        content: attr(aria-valuenow) "分";
                         position: absolute;
-                        bottom: -20px;
+                        top: -25px;
                         left: 50%;
                         transform: translateX(-50%);
-                        font-size: 0.8em;
+                        font-size: 0.85em;
                         color: #6b3e00;
+                        background-color: #fff;
+                        padding: 2px 6px;
+                        border: 1px solid #6b3e00;
+                        border-radius: 4px;
+                        white-space: nowrap;
                     }
                 </style>
                 """, unsafe_allow_html=True)
