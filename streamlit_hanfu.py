@@ -770,10 +770,49 @@ init_session_state()
     #["🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"])
 # 侧边导航栏
 st.sidebar.title("🌖汉服智能小助手🌔")
+
+# 自定义CSS：隐藏radio按钮的默认样式，直接显示图标
+st.markdown("""
+<style>
+    /* 隐藏radio按钮 */
+    .stRadio > div > label > div[data-testid="stMarkdownContainer"] {
+        display: none;
+    }
+    
+    /* 调整radio选项的位置和样式 */
+    .stRadio > div > label {
+        margin-left: 0;
+        padding-left: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* 直接显示图标作为选项 */
+    .stRadio > div > label::before {
+        content: attr(aria-label);
+        font-size: 1.2em;
+        margin-right: 5px;
+    }
+    
+    /* 移除圆点 */
+    .stRadio > div > label::marker {
+        content: "";
+    }
+    
+    /* 选中状态样式 */
+    .stRadio > div > label[data-baseweb="radio"]:has(> input:checked)::before {
+        color: #6b3e00;
+        font-weight: bold;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# 侧边栏导航
 selected_module = st.sidebar.radio(
     "",  # 标题设为空字符串
     [
-        "🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"],
+        "🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"
+    ],
     label_visibility="collapsed"  # 隐藏标签文本
 )
 
@@ -796,6 +835,7 @@ with st.sidebar:
             st.session_state[key] = [] if key in ['selected_hanfu', 'recommendations'] else {}
         st.session_state.current_step = 1
         st.rerun()
+
 # 显示首页信息
 if selected_module == "🏠首页":
     st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
