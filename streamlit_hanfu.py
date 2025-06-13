@@ -702,6 +702,7 @@ init_session_state()
 # 侧边导航栏
 st.sidebar.title("汉服智能小助手")
 selected_module = st.sidebar.radio(
+    "选择模块",
     ["首页", "汉服识别", "汉服展示", "汉服评分与推荐"]
 )
 
