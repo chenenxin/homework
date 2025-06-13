@@ -179,10 +179,79 @@ st.markdown("""
         color: white;
         border-color: #8c6845;
     }
+    
+    /* 评分滑块容器样式 */
+    .rating-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    /* 评分范围标签样式 */
+    .rating-labels {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 10px;
+        font-size: 0.9em;
+        color: #6b3e00;
+    }
+    
+    /* 滑块样式 */
+    div.stSlider {
+        width: 100%;
+    }
+    
+    div.stSlider > div[data-baseweb="slider"] > div {
+        height: 8px;
+        background-color: #eee;
+        border-radius: 4px;
+    }
+    
+    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"] {
+        background-color: #6b3e00;
+        border: none;
+        width: 20px;
+        height: 20px;
+        margin-top: -6px;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        transition: all 0.2s;
+    }
+    
+    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]:focus {
+        box-shadow: 0 0 0 2px rgba(107, 62, 0, 0.2);
+        outline: none;
+    }
+    
+    /* 评分值显示（默认隐藏） */
+    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]::after {
+        content: "";
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.85em;
+        color: #6b3e00;
+        background-color: #fff;
+        padding: 2px 6px;
+        border: 1px solid #6b3e00;
+        border-radius: 4px;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    
+    /* 拖动时显示评分值 */
+    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"].dragging::after {
+        content: attr(aria-valuenow) "分";
+        opacity: 1;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# JavaScript 脚本用于管理按钮状态
+# JavaScript 脚本用于管理按钮状态和滑块拖动事件
 st.markdown("""
 <script>
     // 页面加载完成后执行
@@ -220,6 +289,26 @@ st.markdown("""
                 setTimeout(() => {
                     this.classList.remove('clicked');
                 }, 2000);
+            });
+        });
+        
+        // 滑块拖动事件处理
+        const sliders = document.querySelectorAll('div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]');
+        sliders.forEach(slider => {
+            slider.addEventListener('mousedown', function() {
+                this.classList.add('dragging');
+            });
+            
+            document.addEventListener('mouseup', function() {
+                sliders.forEach(s => s.classList.remove('dragging'));
+            });
+            
+            slider.addEventListener('touchstart', function() {
+                this.classList.add('dragging');
+            });
+            
+            document.addEventListener('touchend', function() {
+                sliders.forEach(s => s.classList.remove('dragging'));
             });
         });
     });
@@ -268,7 +357,6 @@ def resize_image(image, max_width=400):
 def hanfu_recognition_module():
     st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🔎 汉服识别系统</h1>', unsafe_allow_html=True)
     col1, col2 = st.columns([1, 1])
-
     with col1:
         st.markdown("""
         <div class="card" style="padding: 10px;">
@@ -374,7 +462,6 @@ def hanfu_recognition_module():
                            褙子，又名背子、绰子、绣䘿，是中国传统服饰的一种，起于隋唐。褙子直领对襟，两侧从腋下起不缝合，多罩在其他衣服外穿着。流行于宋、明两朝。宋朝褙子直领对襟，两腋开叉，衣裾短者及腰，长者过膝。宋朝女性多以褙子内着抹胸为搭配。明朝褙子有宽袖褙子、窄袖褙子两种。
                         </div>
                     """
-
                 }
                 if prediction in interpretations:
                     st.markdown(interpretations[prediction], unsafe_allow_html=True)
@@ -433,7 +520,6 @@ def display_random_hanfu():
             st.error(f"可用汉服数量不足，只有 {len(valid_item_ids)} 个有效汉服")
             return
         st.session_state.user_ratings = {}
-
     st.markdown('<h1 style="text-align:left; color: #6b3e00;">👉🏻请为以下汉服评分</h1>', unsafe_allow_html=True)
     
     form_key = f"hanfu_rating_form_{hash(tuple(st.session_state.selected_hanfu))}"
@@ -464,41 +550,18 @@ def display_random_hanfu():
                 st.write(f"**{name}**")
                 
                 # 评分范围标签
-                rating_range_html = """
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9em;">
-                    <span style="color: #6b3e00;">1分</span>
-                    <span style="color: #6b3e00;">3分</span>
-                    <span style="color: #6b3e00;">5分</span>
+                st.markdown("""
+                <div class="rating-labels">
+                    <span>1分</span>
+                    <span>3分</span>
+                    <span>5分</span>
                 </div>
-                """
-                st.markdown(rating_range_html, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
                 
                 # 评分滑块
-                default_value = 5
+                default_value = 3  # 设置默认值为3分，更居中
                 if item_id in st.session_state.user_ratings:
                     default_value = st.session_state.user_ratings[item_id]
-                
-                # 自定义滑块样式
-                st.markdown("""
-                <style>
-                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"] {
-                        background-color: #6b3e00;
-                        box-shadow: 0 0 0 1px #6b3e00;
-                    }
-                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]:focus {
-                        box-shadow: 0 0 0 1px #6b3e00, 0 0 0 0.2rem rgba(107, 62, 0, 0.25);
-                    }
-                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]::after {
-                        content: attr(aria-valuenow);
-                        position: absolute;
-                        bottom: -20px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        font-size: 0.8em;
-                        color: #6b3e00;
-                    }
-                </style>
-                """, unsafe_allow_html=True)
                 
                 rating = st.slider(
                     "",
@@ -511,8 +574,7 @@ def display_random_hanfu():
                 )
                 
                 st.session_state.user_ratings[item_id] = rating
-
-
+        
         submitted = st.form_submit_button("提交评分", type="primary")
         if submitted:
             if len(st.session_state.user_ratings) < len(valid_selected):
@@ -533,7 +595,6 @@ def display_recommendations():
     if hanfu_df is None or not isinstance(hanfu_df, pd.DataFrame):
         st.error("汉服数据异常，无法生成推荐")
         return
-
     st.header("🎯 个性化推荐")
     
     # 为按钮添加唯一ID以跟踪状态
@@ -545,7 +606,6 @@ def display_recommendations():
         if len(st.session_state.user_ratings) < 3:
             st.warning("请先为 3 个汉服评分")
             return
-
         with st.spinner("正在生成推荐..."):
             if 'item_id' not in hanfu_df.columns:
                 st.error("汉服数据缺少 item_id 列，无法生成推荐")
@@ -557,7 +617,6 @@ def display_recommendations():
                 recommendations = random.sample(unrated_items, 5)
             else:
                 recommendations = random.sample(item_ids, min(5, len(item_ids)))
-
             formatted_recs = []
             for item_id in recommendations:
                 try:
@@ -571,10 +630,8 @@ def display_recommendations():
                         })
                 except Exception as e:
                     st.warning(f"处理推荐项 {item_id} 时出错: {e}")
-
             st.session_state.recommendations = formatted_recs
             st.success("推荐生成成功！")
-
     if 'recommendations' in st.session_state and st.session_state.recommendations:
         st.subheader("为您推荐汉服")
         for idx, rec in enumerate(st.session_state.recommendations):
@@ -626,10 +683,8 @@ def display_satisfaction():
         if not st.session_state.rec_ratings:
             st.warning("请先对推荐汉服评分")
             return
-
         satisfaction = calculate_satisfaction(st.session_state.rec_ratings)
         st.header(f"推荐满意度：{satisfaction:.1f}%")
-
         if satisfaction >= 80:
             st.success("🎉 非常满意！")
         elif satisfaction >= 60:
@@ -764,16 +819,50 @@ ratings_df, hanfu_df = load_experiment_data()
 init_session_state()
 
 # 侧边导航栏
-#st.sidebar.title("🌖汉服智能小助手🌔")
-#selected_module = st.sidebar.radio(
-    #"选择模块",
-    #["🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"])
-# 侧边导航栏
 st.sidebar.title("🌖汉服智能小助手🌔")
+
+# 自定义CSS：隐藏radio按钮的默认样式，直接显示图标
+st.markdown("""
+<style>
+    /* 隐藏radio按钮 */
+    .stRadio > div > label > div[data-testid="stMarkdownContainer"] {
+        display: none;
+    }
+    
+    /* 调整radio选项的位置和样式 */
+    .stRadio > div > label {
+        margin-left: 0;
+        padding-left: 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    /* 直接显示图标作为选项 */
+    .stRadio > div > label::before {
+        content: attr(aria-label);
+        font-size: 1.2em;
+        margin-right: 5px;
+    }
+    
+    /* 移除圆点 */
+    .stRadio > div > label::marker {
+        content: "";
+    }
+    
+    /* 选中状态样式 */
+    .stRadio > div > label[data-baseweb="radio"]:has(> input:checked)::before {
+        color: #6b3e00;
+        font-weight: bold;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# 侧边栏导航
 selected_module = st.sidebar.radio(
     "",  # 标题设为空字符串
     [
-        "🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"],
+        "🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"
+    ],
     label_visibility="collapsed"  # 隐藏标签文本
 )
 
@@ -783,19 +872,19 @@ with st.sidebar:
         st.write(f"📂 收录热门汉服款式总数：{len(hanfu_df)}")
     else:
         st.write("📂 汉服数据加载失败")
-
     if ratings_df is not None:
         st.write(f"⭐ 用户评分总数：{len(ratings_df)}")
     else:
         st.write("⭐ 用户评分数据加载失败")
     
     # 重新开始按钮
-    if st.button("🔄 重新开始"):  # 注意这里改为 st.button
+    if st.button("🔄 重新开始"):
         for key in ['selected_hanfu', 'user_ratings', 'recommendations', 
                    'rec_ratings', 'satisfaction_calculated']:
             st.session_state[key] = [] if key in ['selected_hanfu', 'recommendations'] else {}
         st.session_state.current_step = 1
         st.rerun()
+
 # 显示首页信息
 if selected_module == "🏠首页":
     st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
@@ -804,9 +893,9 @@ if selected_module == "🏠首页":
         <p style="font-size:1.2em;">欢迎使用汉服智能小助手🥳🎉，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</p>
         <p style="font-size:1.2em;">通过侧边栏导航，您可以：</p>
         <ul style="text-align:left; margin-left:20px; font-size:1.1em;">
-            <ul>📍使用汉服识别系统上传图片并获取汉服类型及文化解读</ul>
-            <ul>📍通过汉服推荐系统获取个性化汉服推荐</ul>
-            <ul>🪩浏览精选汉服</ul>
+            <ul>📍使用汉服识别系统上传图片并获取汉服类型及文化解读</li>
+            <ul>📍通过汉服推荐系统获取个性化汉服推荐</li>
+            <ul>🪩浏览精选汉服</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
@@ -816,4 +905,3 @@ elif selected_module == "👗汉服展示":
     hanfu_display_module()
 elif selected_module == "🌟汉服评分与推荐":
     hanfu_rating_recommendation_module()
-
