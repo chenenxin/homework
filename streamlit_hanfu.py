@@ -744,6 +744,25 @@ selected_module = st.sidebar.radio(
     label_visibility="collapsed"  # 隐藏标签文本
 )
 
+with st.sidebar:
+    st.subheader("📌 汉服数据库")
+    if hanfu_df is not None:
+        st.write(f"📂 收录热门汉服款式总数：{len(hanfu_df)}")
+    else:
+        st.write("📂 汉服数据加载失败")
+
+    if ratings_df is not None:
+        st.write(f"⭐ 用户评分总数：{len(ratings_df)}")
+    else:
+        st.write("⭐ 用户评分数据加载失败")
+    
+    # 重新开始按钮
+    if st.button("🔄 重新开始"):  # 注意这里改为 st.button
+        for key in ['selected_hanfu', 'user_ratings', 'recommendations', 
+                   'rec_ratings', 'satisfaction_calculated']:
+            st.session_state[key] = [] if key in ['selected_hanfu', 'recommendations'] else {}
+        st.session_state.current_step = 1
+        st.rerun()
 # 显示首页信息
 if selected_module == "🏠首页":
     st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
@@ -764,3 +783,4 @@ elif selected_module == "👗汉服展示":
     hanfu_display_module()
 elif selected_module == "🌟汉服评分与推荐":
     hanfu_rating_recommendation_module()
+
