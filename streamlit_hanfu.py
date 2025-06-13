@@ -266,7 +266,7 @@ def resize_image(image, max_width=400):
 
 # 汉服识别模块
 def hanfu_recognition_module():
-    st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">汉服识别系统</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🔎 汉服识别系统</h1>', unsafe_allow_html=True)
     col1, col2 = st.columns([1, 1])
 
     with col1:
@@ -712,11 +712,11 @@ init_session_state()
 st.sidebar.title("🌖汉服智能小助手🌔")
 selected_module = st.sidebar.radio(
     "选择模块",
-    ["首页", "汉服识别", "汉服展示", "汉服评分与推荐"]
+    ["🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"]
 )
 
 # 显示首页信息
-if selected_module == "首页":
+if selected_module == "🏠首页":
     st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
     st.markdown("""
     <div class="card" style="text-align:left;">
@@ -728,9 +728,9 @@ if selected_module == "首页":
         </ul>
     </div>
     """, unsafe_allow_html=True)
-elif selected_module == "汉服识别":
+elif selected_module == "🔎汉服识别":
     hanfu_recognition_module()
-elif selected_module == "汉服展示":
+elif selected_module == "👗汉服展示":
     hanfu_display_module()
-elif selected_module == "汉服评分与推荐":
+elif selected_module == "🌟汉服评分与推荐":
     hanfu_rating_recommendation_module()
