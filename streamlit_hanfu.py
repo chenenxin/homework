@@ -185,7 +185,7 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
     
     /* 评分范围标签样式 */
