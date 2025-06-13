@@ -60,43 +60,6 @@ st.markdown("""
         max-width: 50%;
         border-radius: 8px;
     }
-    /* 修改按钮样式 */
-    .stButton>button {
-        background: linear-gradient(145deg, #a67c52, #916b47);
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-    .stButton>button:hover {
-        background: linear-gradient(145deg, #916b47, #7d5b3a);
-    }
-    .stButton>button:active {
-        background: linear-gradient(145deg, #7d5b3a, #694a2e);
-    }
-    /* 修改侧边导航栏按钮样式 */
-    [data-testid="stSidebarNav"] ul li a {
-        display: block;
-        background: linear-gradient(145deg, #fffaf0, #f5f0e1);
-        color: #6b3e00;
-        border: 1px solid #e8dcc3;
-        border-radius: 5px;
-        padding: 10px 20px;
-        margin-bottom: 10px;
-        text-decoration: none;
-    }
-    [data-testid="stSidebarNav"] ul li a:hover {
-        background: linear-gradient(145deg, #f5f0e1, #ede4d1);
-    }
-    [data-testid="stSidebarNav"] ul li a:active {
-        background: linear-gradient(145deg, #ede4d1, #e4dac6);
-    }
-    [data-testid="stSidebarNav"] ul li a[aria-current="page"] {
-        background: linear-gradient(145deg, #a67c52, #916b47);
-        color: white;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -451,33 +414,119 @@ def display_satisfaction():
 def hanfu_display_module():
     st.markdown('<h1 style="text-align:center; font-size:2.5em; color: #6b3e00; font-weight:bold;">汉服款式展示</h1>', unsafe_allow_html=True)
     
-    gender_options = ["女", "男"]
-    gender_labels = ["女性汉服", "男性汉服"]
+    status = st.selectbox("请选择查看性别", ('女', '男'))
     
-    if 'current_gender' not in st.session_state:
-        st.session_state.current_gender = 0
-    
-    gender_index = st.radio(
-        "请选择查看性别",
-        options=range(len(gender_options)),
-        format_func=lambda x: gender_labels[x],
-        index=st.session_state.current_gender
-    )
-    st.session_state.current_gender = gender_index
+    if status == '女':
+        # 示例图片路径（请替换为实际路径）
+        try:
+            Image1 = Image.open('display/曲裾.jpg')
+            Image2 = Image.open('display/直裾.jpg')
+            Image6 = Image.open('display/圆领袍.jpg')
+            Image4 = Image.open('display/齐胸襦裙.jpg')
+            Image5 = Image.open('display/齐腰襦裙.jpg')
+            Image3 = Image.open('display/马面裙.jpg')
+            Image7 = Image.open('display/袄裙.jpg')
+            Image8 = Image.open('display/褙子.jpg')
+            
+            # 创建布局
+            st.markdown("### 女性汉服款式")
+            row1 = st.columns(4)
+            with row1[0]:
+                st.image(Image1, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">曲裾</div>', unsafe_allow_html=True)
+            with row1[1]:
+                st.image(Image2, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">直裾</div>', unsafe_allow_html=True)
+            with row1[2]:
+                st.image(Image6, width=200) 
+                st.markdown('<div style="text-align:center; color: #6b3e00;">圆领袍</div>', unsafe_allow_html=True)
+            with row1[3]:
+                st.image(Image4, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">齐胸襦裙</div>', unsafe_allow_html=True)
+            
+            row2 = st.columns(4)
+            with row2[0]:
+                st.image(Image5, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">齐腰襦裙</div>', unsafe_allow_html=True)
+            with row2[1]:
+                st.image(Image3, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">马面裙</div>', unsafe_allow_html=True)  
+            with row2[2]:
+                st.image(Image7, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">袄裙</div>', unsafe_allow_html=True)
+            with row2[3]:
+                st.image(Image8, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">褙子</div>', unsafe_allow_html=True) 
+            
+            # 展示表格数据
+            df = pd.DataFrame({
+                'Name': ['曲裾', '直裾', '圆领袍', '齐胸襦裙', '齐腰襦裙', '马面裙', '袄裙', '褙子'],
+                'description': [
+                    '流行于秦汉时期的绕襟深衣，线条优美，端庄大方。',
+                    '直襟的汉服款式，剪裁简洁，行动便利，适合日常穿着。',
+                    '圆领窄袖的袍服，多为官员或士人穿着，庄重大气。',
+                    '唐代流行的高腰裙装，将裙头系于胸上，尽显雍容华贵。',
+                    '裙腰与腰部齐平的传统裙装，清新秀丽，穿着舒适。',
+                    '明代特色裙装，前后有两个裙门，两侧褶裥，端庄稳重。',  
+                    '上衣为袄，下裙搭配的传统服饰，保暖性好，适合秋冬季节。',
+                    '直领对襟的长外衣，两侧开衩，潇洒飘逸，男女皆可穿着。'
+                ]
+            })
+            st.table(df)
+            
+        except Exception as e:
+            st.error(f"图片加载失败: {e}")
+            st.write("请确保图片文件存在且路径正确")
+    else:
+        # 示例图片路径（请替换为实际路径）
+        try:
+            Image4 = Image.open('display/男曲裾.jpeg')
+            Image5 = Image.open('display/曳撒.jpg')
+            Image6 = Image.open('display/圆领袍.jpg')
+            Image7 = Image.open('display/男直裾.jpg')
+            Image9 = Image.open('display/男褙子.jpg')
+            
+            # 创建布局
+            st.markdown("### 男性汉服款式")
+            row1 = st.columns(5)
+            with row1[0]:
+                st.image(Image4, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">曲裾</div>', unsafe_allow_html=True)
+            with row1[1]:
+                st.image(Image5, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">曳撒</div>', unsafe_allow_html=True)
+            with row1[2]:
+                st.image(Image6, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">圆领袍</div>', unsafe_allow_html=True)
+            with row1[3]:
+                st.image(Image7, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">直裾</div>', unsafe_allow_html=True)
+            with row1[4]:
+                st.image(Image9, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">褙子</div>', unsafe_allow_html=True)
+            
+            # 展示表格数据
+            df = pd.DataFrame({
+                'Name': ['曲裾', '曳撒', '圆领袍', '直裾','褙子'],
+                'description': [
+                    '流行于秦汉时期的绕襟深衣，线条优美，端庄大方。',
+                    '明代典型男装，交领右衽，两侧开衩，下摆有褶裥，兼具威严与飘逸。',
+                    '圆领窄袖的袍服，多为官员或士人穿着，庄重大气。',
+                    '直襟的汉服款式，剪裁简洁，行动便利，适合日常穿着。',
+                    '直领对襟的长外衣，两侧开衩，潇洒飘逸，男女皆可穿着。'
+                ]
+            })
+            st.table(df)
+            
+        except Exception as e:
+            st.error(f"图片加载失败: {e}")
+            st.write("请确保图片文件存在且路径正确")
 
-    selected_gender = gender_options[gender_index]
-    if hanfu_df is not None and 'gender' in hanfu_df.columns:
-        filtered_df = hanfu_df[hanfu_df['gender'] == selected_gender]
-        if not filtered_df.empty:
-            for _, row in filtered_df.iterrows():
-                try:
-                    st.write(f"**{row['name']}**")
-                except Exception as e:
-                    st.error(f"显示汉服信息时出错: {e}")
-
-# 侧边导航栏
-module_names = ["汉服识别", "汉服评分与推荐", "汉服展示"]
-selected_module = st.sidebar.radio("选择模块", module_names)
+# 汉服评分与推荐模块
+def hanfu_rating_recommendation_module():
+    display_random_hanfu()
+    display_recommendations()
+    display_satisfaction()
 
 # 加载数据
 ratings_df, hanfu_df = load_experiment_data()
@@ -485,12 +534,29 @@ ratings_df, hanfu_df = load_experiment_data()
 # 初始化会话状态
 init_session_state()
 
-# 根据选择的模块显示相应内容
-if selected_module == "汉服识别":
+# 侧边导航栏
+st.sidebar.title("汉服智能小助手")
+selected_module = st.sidebar.radio(
+    "选择模块",
+    ["首页", "汉服识别", "汉服展示", "汉服评分与推荐"]
+)
+
+# 显示首页信息
+if selected_module == "首页":
+    st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="card" style="text-align:left;">
+        <p style="font-size:1.2em;">欢迎使用汉服智能助手，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</p>
+        <p style="font-size:1.2em;">通过侧边栏导航，您可以：</p>
+        <ul style="text-align:left; margin-left:20px; font-size:1.1em;">
+            <li>使用汉服识别系统上传图片并获取汉服类型及文化解读</li>
+            <li>通过汉服推荐系统获取个性化汉服推荐</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+elif selected_module == "汉服识别":
     hanfu_recognition_module()
-elif selected_module == "汉服评分与推荐":
-    display_random_hanfu()
-    display_recommendations()
-    display_satisfaction()
 elif selected_module == "汉服展示":
     hanfu_display_module()
+elif selected_module == "汉服评分与推荐":
+    hanfu_rating_recommendation_module()
