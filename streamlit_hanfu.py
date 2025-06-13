@@ -189,14 +189,15 @@ div[data-testid="stRadio"] input:checked + label {
     margin-bottom: 20px;
 }
 
-/* 评分范围标签样式 */
+/* 评分范围标签样式（隐藏默认的 1分、3分、5分 文本显示，若需要保留样式布局仅隐藏文字，可调整 color 为 transparent 等 ）*/
 .rating-labels {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 10px;
     font-size: 0.9em;
-    color: #6b3e00;
+    /* 让刻度文本透明不可见，若想彻底移除元素，可结合 display: none，但会影响布局，根据实际需求选 */
+    color: transparent; 
 }
 
 /* 滑块样式 */
@@ -248,47 +249,6 @@ div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]::after {
 div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"].dragging::after {
     content: attr(aria-valuenow) "分";
     opacity: 1;
-}
-
-/* 进度条样式统一控制 */
-div[data-testid="stProgressBar"] {
-    /* 固定宽度，确保所有进度条宽度一致 */
-    width: 100%;
-    /* 设置最大宽度，防止在大屏幕上过度拉伸 */
-    max-width: 500px;
-    /* 居中显示 */
-    margin: 15px auto;
-    /* 固定高度 */
-    height: 24px;
-    /* 添加外边框，使进度条更明显 */
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    /* 确保进度条位置一致 */
-    position: relative;
-}
-
-/* 进度条内部填充 */
-div[data-testid="stProgressBar"] > div {
-    /* 使用绝对定位确保进度条内部填充位置一致 */
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    /* 使用相同的渐变颜色，与现有设计风格一致 */
-    background-color: #a67c52;
-    background-image: linear-gradient(145deg, #a67c52, #8c6845);
-    border-radius: 4px;
-    /* 添加平滑过渡效果 */
-    transition: width 0.3s ease;
-}
-
-/* 进度条标签 */
-div[data-testid="stProgressBar"] + div {
-    /* 固定标签位置 */
-    margin-top: 5px;
-    text-align: center;
-    font-size: 0.85em;
-    color: #6b3e00;
 }
 
 </style>
