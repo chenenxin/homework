@@ -352,7 +352,29 @@ def hanfu_recognition_module():
                            &nbsp;&nbsp;&nbsp;&nbsp;
                            曳撒（yì sǎn ），读法源自蒙古语，为“一色（shǎi）”变音；来自蒙语“质孙（jisum），元代服饰之一。本意是蒙古袍。后在明王朝所吸纳继承，作为骑射服装和宫廷侍卫服装被广泛运用到明朝皇室的日常生活中。明朝人王世贞在《觚不觚集》里讲过“胡服也，其短袖或无袖，而衣中断，其下有横褶，而下腹竖褶之。若袖长则为曳撒“。虽然是胡服，但由于在明代被大量的使用，而在现代的汉服运动中穿着的人众多，所以这里也把它作为一种汉服款式进行解说。
                         </div>
+                    """,
+                    "袄裙": """
+                        <div style="font-size: 1.4em; padding: 12px;">
+                           <br><br>
+                           &nbsp;&nbsp;&nbsp;&nbsp;
+                           袄裙，是对中国古代女子上身穿袄，下身穿裙的统称。裙袄着装，从唐代开始就有衣物疏记录，一直到民国。现代一般谈论袄裙时候指的是明代的裙袄着装。有人对于袄裙定义为上衣穿裙子外为袄裙，实际是比较错误模糊的定义，因为有明一代，衫子也照样外穿，东晋十六国陶俑也显示此时代襦是穿于裙外的。所以不能以是否外穿定义袄裙，而应该以上身穿袄，下身穿裙的基本语境来定义袄裙一词。“袄裙”一般指的是明代有里子的双层的上襦和下裙（裙子一般为单层）的服装。
+                        </div>
+                    """,
+                    "圆领袍": """
+                        <div style="font-size: 1.4em; padding: 12px;">
+                           <br><br>
+                           &nbsp;&nbsp;&nbsp;&nbsp;
+                           圆领袍，唐宋时称为“上领”、明朝则称为“团领”、“盘领”或“圆领”，是中国古代传统服饰常见款式之一。圆领袍流行于隋唐，宋朝以后，圆领袍成为官员们的正式服装之一，在后来的明朝也被大量运用，明朝的圆领袍、配上补，成为了分辨官位阶级的最方便的方式。
+                        </div>
+                    """,
+                    "褙子": """
+                        <div style="font-size: 1.4em; padding: 12px;">
+                           <br><br>
+                           &nbsp;&nbsp;&nbsp;&nbsp;
+                           褙子，又名背子、绰子、绣䘿，是中国传统服饰的一种，起于隋唐。褙子直领对襟，两侧从腋下起不缝合，多罩在其他衣服外穿着。流行于宋、明两朝。宋朝褙子直领对襟，两腋开叉，衣裾短者及腰，长者过膝。宋朝女性多以褙子内着抹胸为搭配。明朝褙子有宽袖褙子、窄袖褙子两种。
+                        </div>
                     """
+
                 }
                 if prediction in interpretations:
                     st.markdown(interpretations[prediction], unsafe_allow_html=True)
@@ -586,7 +608,7 @@ def display_satisfaction():
 
 # 汉服展示模块
 def hanfu_display_module():
-    st.markdown('<h1 style="text-align:center; font-size:2.5em; color: #6b3e00; font-weight:bold;">汉服款式展示</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="text-align:center; font-size:2.5em; color: #6b3e00; font-weight:bold;">👗汉服款式展示</h1>', unsafe_allow_html=True)
     
     status = st.selectbox("请选择性别", ('女', '男'))
     
