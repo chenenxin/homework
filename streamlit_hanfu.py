@@ -451,17 +451,20 @@ def main():
     init_session_state()
     ratings_df, hanfu_df = load_experiment_data()
 
-    module_options = ["汉服识别", "汉服评分与推荐", "汉服款式展示"]
+    # 显示欢迎信息
+    st.markdown('<h1 style="text-align:center; color: #6b3e00;">欢迎使用汉服智能助手，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</h1>', unsafe_allow_html=True)
+
+    module_options = ["汉服识别", "汉服展示", "汉服评分与推荐"]
     selected_module = st.sidebar.selectbox("选择模块", module_options)
 
     if selected_module == "汉服识别":
         hanfu_recognition_module()
+    elif selected_module == "汉服展示":
+        hanfu_display_module()
     elif selected_module == "汉服评分与推荐":
         display_random_hanfu()
         display_recommendations()
         display_satisfaction()
-    elif selected_module == "汉服款式展示":
-        hanfu_display_module()
 
 
 if __name__ == "__main__":
