@@ -444,27 +444,33 @@ def hanfu_display_module():
     else:
         st.error("汉服数据异常或缺少性别列，无法展示。")
 
-
 # 主函数
 def main():
     global ratings_df, hanfu_df
     init_session_state()
     ratings_df, hanfu_df = load_experiment_data()
 
-    # 显示欢迎信息
-    st.markdown('<h1 style="text-align:center; color: #6b3e00;">欢迎使用汉服智能助手，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</h1>', unsafe_allow_html=True)
+    # 侧边导航栏直接显示三个模块
+    st.sidebar.markdown("### 模块选择")
+    if st.sidebar.button("汉服识别"):
+        st.session_state.current_module = "汉服识别"
+    if st.sidebar.button("汉服展示"):
+        st.session_state.current_module = "汉服展示"
+    if st.sidebar.button("汉服评分与推荐"):
+        st.session_state.current_module = "汉服评分与推荐"
 
-    module_options = ["汉服识别", "汉服展示", "汉服评分与推荐"]
-    selected_module = st.sidebar.selectbox("选择模块", module_options)
-
-    if selected_module == "汉服识别":
-        hanfu_recognition_module()
-    elif selected_module == "汉服展示":
-        hanfu_display_module()
-    elif selected_module == "汉服评分与推荐":
-        display_random_hanfu()
-        display_recommendations()
-        display_satisfaction()
+    # 如果没有选择模块，显示欢迎信息
+    if 'current_module' not in st.session_state or st.session_state.current_module is None:
+        st.markdown("欢迎使用汉服智能助手，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。")
+    else:
+        if st.session_state.current_module == "汉服识别":
+            hanfu_recognition_module()
+        elif st.session_state.current_module == "汉服展示":
+            hanfu_display_module()
+        elif st.session_state.current_module == "汉服评分与推荐":
+            display_random_hanfu()
+            display_recommendations()
+            display_satisfaction()
 
 
 if __name__ == "__main__":
