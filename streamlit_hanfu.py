@@ -127,32 +127,20 @@ st.markdown("""
         background-image: linear-gradient(145deg, #8c6845, #6b4e33);
     }
     
-    /* 隐藏侧边栏左侧的按钮图标 */
-    [data-testid="stSidebar"] button[kind="header"] {
-        display: none;
-    }
-    
-    /* 评分按钮优化 */
+    /* 评分按钮 */
     div[data-testid="stRadio"] > div {
         display: flex;
         justify-content: center;
         gap: 5px;
-        margin-top: 10px;
     }
     
     div[data-testid="stRadio"] label {
         background-color: #f5f0e1;
-        border: none; /* 移除外侧边框 */
-        border-radius: 50%; /* 圆形按钮 */
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        padding: 0;
+        border: 1px solid #d4c4a6;
+        border-radius: 4px;
+        padding: 6px 12px;
         transition: all 0.2s;
         cursor: pointer;
-        font-weight: bold;
-        box-shadow: 1px 1px 3px rgba(107, 62, 0, 0.2);
     }
     
     div[data-testid="stRadio"] label:hover {
@@ -160,15 +148,9 @@ st.markdown("""
     }
     
     div[data-testid="stRadio"] input:checked + label {
-        background-color: #c84b31; /* 点击后显示红色 */
+        background-color: #a67c52;
         color: white;
-        box-shadow: 1px 1px 5px rgba(200, 75, 49, 0.5);
-        transform: scale(1.1);
-    }
-    
-    /* 隐藏评分（选择模块）按钮上方的文字 */
-    div[data-testid="stRadio"] > label {
-        display: none;
+        border-color: #8c6845;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -439,7 +421,7 @@ def display_random_hanfu():
                     default_idx = rating_options.index(st.session_state.user_ratings[item_id])
                 
                 rating_index = st.radio(
-                    "",  # 移除评分按钮上方的文字
+                    f"为汉服评分",
                     options=range(len(rating_options)),
                     format_func=lambda x: rating_labels[x],
                     index=default_idx,
@@ -532,7 +514,7 @@ def display_recommendations():
                         default_idx = rating_options.index(int(st.session_state.rec_ratings[rec['item_id']]))
                     
                     rating_index = st.radio(
-                        "",  # 移除评分按钮上方的文字
+                        "您的实际评分",
                         options=range(len(rating_options)),
                         format_func=lambda x: rating_labels[x],
                         index=default_idx,
