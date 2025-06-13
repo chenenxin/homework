@@ -594,21 +594,19 @@ def display_random_hanfu():
 
 # 显示推荐结果
 def display_recommendations():
+    """显示汉服推荐结果（增强版）"""
     global hanfu_df
     if hanfu_df is None or not isinstance(hanfu_df, pd.DataFrame):
         st.error("汉服数据异常，无法生成推荐")
         return
+
     st.header("🎯 个性化推荐")
-    
-    # 为按钮添加唯一ID以跟踪状态
-    button_key = "get_recommendations_button"
-    if st.button("获取个性化推荐", type="primary", key=button_key):
-        # 记录按钮状态
-        st.session_state.button_states[button_key] = True
-        
+
+    if st.button("获取个性化推荐", type="primary", key="get_recommendations"):
         if len(st.session_state.user_ratings) < 3:
-            st.warning("请先为 3 个汉服评分")
+            st.warning("请先为3个汉服评分")
             return
+
         with st.spinner("正在生成推荐..."):
             if 'item_id' not in hanfu_df.columns:
                 st.error("汉服数据缺少 item_id 列，无法生成推荐")
@@ -620,6 +618,7 @@ def display_recommendations():
                 recommendations = random.sample(unrated_items, 5)
             else:
                 recommendations = random.sample(item_ids, min(5, len(item_ids)))
+
             formatted_recs = []
             for item_id in recommendations:
                 try:
@@ -633,8 +632,10 @@ def display_recommendations():
                         })
                 except Exception as e:
                     st.warning(f"处理推荐项 {item_id} 时出错: {e}")
+
             st.session_state.recommendations = formatted_recs
             st.success("推荐生成成功！")
+
     if 'recommendations' in st.session_state and st.session_state.recommendations:
         st.subheader("为您推荐汉服")
         for idx, rec in enumerate(st.session_state.recommendations):
@@ -647,24 +648,12 @@ def display_recommendations():
                         disabled=True,
                         key=f"rec_hanfu_{rec['item_id']}_{idx}"
                     )
-                    
-                    rating_options = list(range(1, 6))
-                    rating_labels = [f"{i}分" for i in rating_options]
-                    default_idx = 4
-                    
-                    if rec['item_id'] in st.session_state.rec_ratings:
-                        default_idx = rating_options.index(int(st.session_state.rec_ratings[rec['item_id']]))
-                    
-                    rating_index = st.radio(
+                    rating = st.selectbox(
                         "您的实际评分",
-                        options=range(len(rating_options)),
-                        format_func=lambda x: rating_labels[x],
-                        index=default_idx,
-                        key=f"rec_rating_{rec['item_id']}_{idx}",
-                        horizontal=True
+                        options=list(range(1, 6)),
+                        key=f"rec_rating_{rec['item_id']}_{idx}"
                     )
-                    
-                    st.session_state.rec_ratings[rec['item_id']] = float(rating_options[rating_index])
+                    st.session_state.rec_ratings[rec['item_id']] = float(rating)
             except Exception as e:
                 st.error(f"显示推荐项时出错: {e}")
 
