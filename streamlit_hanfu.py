@@ -185,7 +185,7 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
     
     /* 评分范围标签样式 */
@@ -200,7 +200,7 @@ st.markdown("""
     
     /* 滑块样式 */
     div.stSlider {
-        width: 100%;
+        width: 50%;
     }
     
     div.stSlider > div[data-baseweb="slider"] > div {
