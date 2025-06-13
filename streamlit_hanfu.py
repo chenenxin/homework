@@ -296,7 +296,7 @@ def display_random_hanfu():
                 rating_options = list(range(1, 6))
                 rating_labels = [f"{i}分" for i in rating_options]
                 
-                default_idx = 4
+                default_idx = 4  # 默认选择5分
                 if item_id in st.session_state.user_ratings:
                     default_idx = rating_options.index(st.session_state.user_ratings[item_id])
                 
@@ -577,6 +577,9 @@ def main():
             if st.button("进入汉服推荐", key="nav_recommendation"):
                 st.session_state.current_module = "recommendation"
     
+    # 添加调试信息
+    st.write(f"会话状态: {st.session_state}")
+    
     if hasattr(st.session_state, 'current_module'):
         if st.session_state.current_module == "recognition":
             hanfu_recognition_module()
@@ -586,7 +589,7 @@ def main():
         # 默认显示欢迎页面
         st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
         st.markdown("""
-        <div class="card" style="text-align:left;">
+        <div class="card" style="text-align:left; padding: 30px;">
             <p style="font-size:1.2em;">欢迎使用汉服智能助手，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</p>
             <p style="font-size:1.2em;">通过侧边栏导航，您可以：</p>
             <ul style="text-align:left; margin-left:20px; font-size:1.1em;">
