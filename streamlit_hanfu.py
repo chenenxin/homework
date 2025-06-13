@@ -159,7 +159,7 @@ button[data-testid="stFormSubmitButton"]:active {
 div[data-testid="stRadio"] > div {
     display: flex;
     justify-content: center;
-    gap: 5px;
+    gap: 4px;
 }
 
 div[data-testid="stRadio"] label {
