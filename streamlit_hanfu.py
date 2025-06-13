@@ -740,7 +740,7 @@ st.sidebar.title("🌖汉服智能小助手🌔")
 selected_module = st.sidebar.radio(
     "",  # 标题设为空字符串
     [
-    "🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"]
+        "🏠首页", "🔎汉服识别", "👗汉服展示", "🌟汉服评分与推荐"],
     label_visibility="collapsed"  # 隐藏标签文本
 )
 
