@@ -20,7 +20,7 @@ pip install -r requirements.txt
 
 2. 运行应用：
 ```bash
-streamlit run streamlit_hanfu.py
+streamlit run streamlit.py
 ```
 
 ## 部署到 Streamlit Cloud
@@ -28,7 +28,7 @@ streamlit run streamlit_hanfu.py
 1. 将代码推送到 GitHub 仓库
 2. 在 [Streamlit Cloud](https://streamlit.io/cloud) 创建新应用
 3. 连接到你的 GitHub 仓库
-4. 指定主文件：`streamlit_hanfu.py`
+4. 指定主文件：`streamlit.py`
 
 ## 注意事项
 
