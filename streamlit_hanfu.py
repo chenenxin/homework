@@ -753,8 +753,8 @@ if selected_module == "🏠首页":
         <p style="font-size:1.2em;">通过侧边栏导航，您可以：</p>
         <ul style="text-align:left; margin-left:20px; font-size:1.1em;">
             <ul>📍使用汉服识别系统上传图片并获取汉服类型及文化解读</ul>
-            <li>📍通过汉服推荐系统获取个性化汉服推荐</li>
-            <li>🪩浏览精选汉服</li>
+            <ul>📍通过汉服推荐系统获取个性化汉服推荐</ul>
+            <ul>🪩浏览精选汉服</ul>
         </ul>
     </div>
     """, unsafe_allow_html=True)
