@@ -159,7 +159,9 @@ def hanfu_recognition_module():
                     st.markdown(
                         """
                         <div style="font-size: 1.4em; padding: 12px;">
-                            明代特色裙装，前后有两个裙门，两侧褶裥，端庄稳重。
+                            <br><br>
+                           &nbsp;&nbsp;&nbsp;&nbsp;
+                            马面裙，又名“马面褶裙”， 中国古代汉族女子的主要裙式，前后里外共有四个裙门，两两重合，外裙门有装饰，内裙门装饰较少或无装饰，马面裙侧面打裥，裙腰多用白色布，取白头偕老之意，以绳或纽固结。
                         </div>
                         """,
                         unsafe_allow_html=True
@@ -168,6 +170,8 @@ def hanfu_recognition_module():
                     st.markdown(
                         """
                         <div style="font-size: 1.4em; padding: 12px;">
+                            <br><br>
+                           &nbsp;&nbsp;&nbsp;&nbsp;
                             曲裾，全称曲裾袍，考古报告称绕襟袍。属上下分裁式，归类于“深衣类汉服”，故又称曲裾深衣、绕襟深衣。其历史款式原型流行于先秦至汉代。
                         </div>
                         """,
@@ -177,7 +181,31 @@ def hanfu_recognition_module():
                     st.markdown(
                         """
                         <div style="font-size: 1.4em; padding: 12px;">
+                           <br><br>
+                           &nbsp;&nbsp;&nbsp;&nbsp;
                             齐胸襦裙是襦裙的一种，隋唐五代时期出现的一种裙腰束的非常高的襦裙，一些服装史上多称之为高腰襦裙，一般改称之为齐胸襦裙。
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                elif prediction == "齐腰襦裙":
+                    st.markdown(
+                        """
+                        <div style="font-size: 1.4em; padding: 12px;">
+                           <br><br>
+                           &nbsp;&nbsp;&nbsp;&nbsp;
+                           齐腰襦裙为襦裙的一类，裙腰与腰部平齐，故名。齐腰襦裙的上襦可为交领或直领（即领襟垂直向下不相交）。同高腰襦裙相比，齐腰襦裙更为常见。按上襦分，可分为交领齐腰襦裙、直领齐腰襦裙（对襟齐腰襦裙）。按穿着对象分，可分为女式齐腰襦裙、男式齐腰襦裙。
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                elif prediction == "曳撒":
+                    st.markdown(
+                        """
+                        <div style="font-size: 1.4em; padding: 12px;">
+                           <br><br>
+                           &nbsp;&nbsp;&nbsp;&nbsp;
+                           曳撒（yì sǎn ），读法源自蒙古语，为“一色（shǎi）”变音；来自蒙语“质孙（jisum），元代服饰之一。本意是蒙古袍。后在明王朝所吸纳继承，作为骑射服装和宫廷侍卫服装被广泛运用到明朝皇室的日常生活中。明朝人王世贞在《觚不觚集》里讲过“胡服也，其短袖或无袖，而衣中断，其下有横褶，而下腹竖褶之。若袖长则为曳撒“。虽然是胡服，但由于在明代被大量的使用，而在现代的汉服运动中穿着的人众多，所以这里也把它作为一种汉服款式进行解说。
                         </div>
                         """,
                         unsafe_allow_html=True
