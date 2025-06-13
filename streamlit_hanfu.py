@@ -60,88 +60,144 @@ st.markdown("""
         max-width: 50%;
         border-radius: 8px;
     }
-</style>
-""", unsafe_allow_html=True)
-
-# 自定义CSS样式
-st.markdown("""
-<style>
-    /* 其他样式保留不变 */
-
-    /* 按钮基础样式 */
-    .stButton>button {
-        background: linear-gradient(145deg, #e6d2b0, #d4c4a6);
-        color: #6b3e00;
+    
+    /* 自定义按钮样式 */
+    button.stButton {
+        /* 未点击状态 */
+        background-color: #d4a976;
+        background-image: linear-gradient(145deg, #d4a976, #a67c52);
+        color: white;
         border: none;
         border-radius: 8px;
-        font-weight: bold;
-        padding: 10px 16px;
-        font-size: 16px;
+        padding: 8px 16px;
+        font-size: 14px;
+        box-shadow: 2px 2px 5px rgba(107, 62, 0, 0.3);
         transition: all 0.3s ease;
-        cursor: pointer;
-        box-shadow: 0 2px 5px rgba(107, 62, 0, 0.2);
-        margin: 5px;
+        font-weight: bold;
     }
-
-    /* 按钮悬停效果 */
-    .stButton>button:hover {
-        background: linear-gradient(145deg, #d4c4a6, #c0b096);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(107, 62, 0, 0.2);
+    
+    button.stButton:hover {
+        /* 悬停状态 */
+        background-image: linear-gradient(145deg, #e0b98e, #bf956b);
+        box-shadow: 3px 3px 7px rgba(107, 62, 0, 0.4);
+        transform: translateY(-1px);
     }
-
-    /* 按钮点击效果（已激活状态） */
-    .stButton>button:active,
-    .stButton>button[data-baseweb="tab"]:focus {
-        background: linear-gradient(145deg, #a67c52, #8b6435);
-        color: white;
-        transform: translateY(0);
-        box-shadow: 0 2px 5px rgba(107, 62, 0, 0.3);
+    
+    button.stButton:active {
+        /* 点击状态 */
+        background-image: linear-gradient(145deg, #a67c52, #8c6845);
+        box-shadow: inset 2px 2px 5px rgba(107, 62, 0, 0.3);
+        transform: translateY(1px);
     }
-
-    /* 主按钮样式（如提交、获取推荐等） */
-    .stButton[onclick^="get_recommendations"]>button,
-    .stButton[onclick^="calculate_satisfaction"]>button {
-        background: linear-gradient(145deg, #d4a976, #c49660);
-        color: white;
+    
+    /* 特殊功能按钮样式（如侧边栏按钮） */
+    [data-testid="stSidebar"] button.stButton {
+        background-color: #d4c4a6;
+        background-image: linear-gradient(145deg, #d4c4a6, #bcaa90);
     }
-
-    /* 主按钮悬停效果 */
-    .stButton[onclick^="get_recommendations"]>button:hover,
-    .stButton[onclick^="calculate_satisfaction"]>button:hover {
-        background: linear-gradient(145deg, #c49660, #b48650);
-        box-shadow: 0 4px 8px rgba(107, 62, 0, 0.3);
+    
+    [data-testid="stSidebar"] button.stButton:hover {
+        background-image: linear-gradient(145deg, #e1d3c0, #cdc1a8);
     }
-
-    /* 主按钮点击效果 */
-    .stButton[onclick^="get_recommendations"]>button:active,
-    .stButton[onclick^="calculate_satisfaction"]>button:active {
-        background: linear-gradient(145deg, #8b6435, #72532d);
-        box-shadow: 0 2px 5px rgba(107, 62, 0, 0.4);
+    
+    [data-testid="stSidebar"] button.stButton:active {
+        background-image: linear-gradient(145deg, #bcaa90, #a89880);
     }
-
-    /* 卡片中的按钮（如评分按钮） */
-    .stRadio {
-        margin: 10px 0;
+    
+    /* 已点击按钮的特殊样式 */
+    button.stButton.clicked {
+        background-image: linear-gradient(145deg, #8c6845, #6b4e33);
+        box-shadow: inset 2px 2px 5px rgba(107, 62, 0, 0.5);
+        transform: translateY(1px);
+        color: #f8f3e9;
     }
-
+    
     /* 表单提交按钮 */
-    .stForm>div>div:last-child>div>div>button {
-        background: linear-gradient(145deg, #d4a976, #c49660);
+    button[data-testid="stFormSubmitButton"] {
+        background-color: #a67c52;
+        background-image: linear-gradient(145deg, #a67c52, #8c6845);
+        font-weight: bold;
+    }
+    
+    button[data-testid="stFormSubmitButton"]:hover {
+        background-image: linear-gradient(145deg, #bf956b, #a67c52);
+    }
+    
+    button[data-testid="stFormSubmitButton"]:active {
+        background-image: linear-gradient(145deg, #8c6845, #6b4e33);
+    }
+    
+    /* 评分按钮 */
+    div[data-testid="stRadio"] > div {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+    
+    div[data-testid="stRadio"] label {
+        background-color: #f5f0e1;
+        border: 1px solid #d4c4a6;
+        border-radius: 4px;
+        padding: 6px 12px;
+        transition: all 0.2s;
+        cursor: pointer;
+    }
+    
+    div[data-testid="stRadio"] label:hover {
+        background-color: #e8dcc3;
+    }
+    
+    div[data-testid="stRadio"] input:checked + label {
+        background-color: #a67c52;
         color: white;
-        width: 100%;
-    }
-
-    .stForm>div>div:last-child>div>div>button:hover {
-        background: linear-gradient(145deg, #c49660, #b48650);
-    }
-
-    .stForm>div>div:last-child>div>div>button:active {
-        background: linear-gradient(145deg, #8b6435, #72532d);
+        border-color: #8c6845;
     }
 </style>
 """, unsafe_allow_html=True)
 
+# JavaScript 脚本用于管理按钮状态
+st.markdown("""
+<script>
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+        // 查找所有按钮
+        const buttons = document.querySelectorAll('button.stButton');
+        
+        // 为每个按钮添加点击事件
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 移除所有按钮的点击状态
+                buttons.forEach(btn => btn.classList.remove('clicked'));
+                // 为当前按钮添加点击状态
+                this.classList.add('clicked');
+                
+                // 存储按钮状态到本地存储
+                localStorage.setItem('clickedButton', this.id || this.textContent);
+            });
+            
+            // 检查本地存储，恢复之前的点击状态
+            const savedButton = localStorage.getItem('clickedButton');
+            if (savedButton && (button.id === savedButton || button.textContent === savedButton)) {
+                button.classList.add('clicked');
+            }
+        });
+        
+        // 表单提交按钮状态管理
+        const formSubmitButtons = document.querySelectorAll('button[data-testid="stFormSubmitButton"]');
+        formSubmitButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 添加点击状态
+                this.classList.add('clicked');
+                
+                // 2秒后自动移除点击状态（防止表单提交后按钮一直保持点击状态）
+                setTimeout(() => {
+                    this.classList.remove('clicked');
+                }, 2000);
+            });
+        });
+    });
+</script>
+""", unsafe_allow_html=True)
 
 # Python 版本检查
 if sys.version_info >= (3, 13):
@@ -293,6 +349,7 @@ def init_session_state():
         st.session_state.rating_range = (1, 5)
         st.session_state.satisfaction = None
         st.session_state.current_module = None
+        st.session_state.button_states = {}  # 用于存储按钮点击状态
 
 # 显示随机汉服并收集评分
 def display_random_hanfu():
@@ -396,8 +453,13 @@ def display_recommendations():
         return
 
     st.header("🎯 个性化推荐")
-
-    if st.button("获取个性化推荐", type="primary", key="get_recommendations"):
+    
+    # 为按钮添加唯一ID以跟踪状态
+    button_key = "get_recommendations_button"
+    if st.button("获取个性化推荐", type="primary", key=button_key):
+        # 记录按钮状态
+        st.session_state.button_states[button_key] = True
+        
         if len(st.session_state.user_ratings) < 3:
             st.warning("请先为 3 个汉服评分")
             return
@@ -473,7 +535,12 @@ def calculate_satisfaction(ratings):
 
 # 显示满意度结果
 def display_satisfaction():
-    if st.button("计算推荐满意度", key="calculate_satisfaction"):
+    # 为按钮添加唯一ID以跟踪状态
+    button_key = "calculate_satisfaction_button"
+    if st.button("计算推荐满意度", key=button_key):
+        # 记录按钮状态
+        st.session_state.button_states[button_key] = True
+        
         if not st.session_state.rec_ratings:
             st.warning("请先对推荐汉服评分")
             return
