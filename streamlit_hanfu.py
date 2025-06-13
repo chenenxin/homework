@@ -17,7 +17,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# 自定义CSS样式
+# 自定义 CSS 样式
 st.markdown("""
 <style>
     .stApp {
@@ -37,6 +37,33 @@ st.markdown("""
     }
     [data-testid="stSidebar"] {
         background: linear-gradient(145deg, #f8f3e9, #e9e0d2);
+        padding-top: 20px;
+    }
+    [data-testid="stSidebar"] .stRadio > div {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    [data-testid="stSidebar"] .stRadio label {
+        background-color: #d4c4a6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 20px;
+        font-size: 16px;
+        box-shadow: 2px 2px 5px rgba(107, 62, 0, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    [data-testid="stSidebar"] .stRadio label:hover {
+        background-color: #e1d3c0;
+        box-shadow: 3px 3px 7px rgba(107, 62, 0, 0.4);
+        transform: translateY(-1px);
+    }
+    [data-testid="stSidebar"] .stRadio input:checked + label {
+        background-color: #a67c52;
+        box-shadow: inset 2px 2px 5px rgba(107, 62, 0, 0.3);
+        transform: translateY(1px);
     }
     .st-bb {
         background-color: #a67c52;
