@@ -115,28 +115,25 @@ def hanfu_recognition_module():
         uploaded_file = st.file_uploader("选择一张图片...", type=["jpg", "jpeg", "png"], key="recognition_uploader")
         
         if uploaded_file is not None:
-            try:
-                original_image = Image.open(uploaded_file)
-                resized_image = resize_image(original_image, max_width=350)
-                
-                st.markdown('<div class="card-image-container">', unsafe_allow_html=True)
-                st.image(resized_image, caption="上传的图片", use_container_width=False)
-                st.markdown('</div>', unsafe_allow_html=True)
-                
-                image = PILImage.create(np.array(resized_image))
-                model = load_model()
-                
-                if model:
-                    try:
-                        pred, pred_idx, probs = model.predict(image)
-                        st.markdown(f'<div class="pred-result">预测结果: {pred}; 概率: {probs[pred_idx]:.4f}</div>', unsafe_allow_html=True)
-                        st.session_state.recognition_prediction = pred
-                    except Exception as e:
-                        st.error(f"识别失败: {str(e)}")
-                else:
-                    st.warning("模型加载失败，无法进行识别")
-            except Exception as e:
-                st.error(f"处理上传图片时出错: {str(e)}")
+            original_image = Image.open(uploaded_file)
+            resized_image = resize_image(original_image, max_width=350)
+            
+            st.markdown('<div class="card-image-container">', unsafe_allow_html=True)
+            st.image(resized_image, caption="上传的图片", use_container_width=False)
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            image = PILImage.create(np.array(resized_image))
+            model = load_model()
+            
+            if model:
+                try:
+                    pred, pred_idx, probs = model.predict(image)
+                    st.markdown(f'<div class="pred-result">预测结果: {pred}; 概率: {probs[pred_idx]:.4f}</div>', unsafe_allow_html=True)
+                    st.session_state.recognition_prediction = pred
+                except Exception as e:
+                    st.error(f"识别失败: {str(e)}")
+            else:
+                st.warning("模型加载失败，无法进行识别")
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
@@ -149,50 +146,70 @@ def hanfu_recognition_module():
         
         if uploaded_file is not None:
             if prediction:
-                interpretations = {
-                    "直裾": """
+                if prediction == "直裾":
+                    st.markdown(
+                        """
                         <div style="font-size: 1.3em; padding: 12px;">
                         直裾，又被称为襜褕，这个说法来自《说文解字》， 衣襟裾为方直，区别于曲裾。裾就是指衣服的大襟。直裾下摆部份剪裁为垂直，衣裾在身侧或侧后方，没有缝在衣上的系带，由布质或皮革制的腰带固定。
                         </div>
-                    """,
-                    "马面裙": """
+                        """,
+                        unsafe_allow_html=True
+                    )
+                elif prediction == "马面裙":
+                    st.markdown(
+                        """
                         <div style="font-size: 1.4em; padding: 12px;">
                             <br><br>
                            &nbsp;&nbsp;&nbsp;&nbsp;
                             马面裙，又名“马面褶裙”， 中国古代汉族女子的主要裙式，前后里外共有四个裙门，两两重合，外裙门有装饰，内裙门装饰较少或无装饰，马面裙侧面打裥，裙腰多用白色布，取白头偕老之意，以绳或纽固结。
                         </div>
-                    """,
-                    "曲裾": """
+                        """,
+                        unsafe_allow_html=True
+                    )
+                elif prediction == "曲裾":
+                    st.markdown(
+                        """
                         <div style="font-size: 1.4em; padding: 12px;">
                             <br><br>
                            &nbsp;&nbsp;&nbsp;&nbsp;
                             曲裾，全称曲裾袍，考古报告称绕襟袍。属上下分裁式，归类于“深衣类汉服”，故又称曲裾深衣、绕襟深衣。其历史款式原型流行于先秦至汉代。
                         </div>
-                    """,
-                    "齐胸襦裙": """
+                        """,
+                        unsafe_allow_html=True
+                    )
+                elif prediction == "齐胸襦裙":
+                    st.markdown(
+                        """
                         <div style="font-size: 1.4em; padding: 12px;">
                            <br><br>
                            &nbsp;&nbsp;&nbsp;&nbsp;
                             齐胸襦裙是对隋唐五代时期特有的一种女子裙装的称呼。一般穿法为一件对襟衫衣搭配一条下裙，或者一件交领上襦搭配下裙，即称为齐胸襦裙。齐胸衫裙是中国汉服形制的的一种，汉晋以来裙子的裙腰束于腰上，而隋唐五代时期裙子的裙腰束得更高，很多都在胸上，一些服装史上多称之为高腰衫裙。根据现在人们对它的考证，一般改称之为齐胸衫裙，齐胸衫裙已有文物出土，新疆阿斯塔纳唐墓出土两条唐裙。由于一些商家误导，齐胸衫裙常常被叫错为齐胸襦裙，正确叫法是齐胸衫裙。
                         </div>
-                    """,
-                    "齐腰襦裙": """
+                        """,
+                        unsafe_allow_html=True
+                    )
+                elif prediction == "齐腰襦裙":
+                    st.markdown(
+                        """
                         <div style="font-size: 1.4em; padding: 12px;">
                            <br><br>
                            &nbsp;&nbsp;&nbsp;&nbsp;
                            齐腰襦裙为襦裙的一类，属于汉服。裙腰与腰部平齐，故名。齐腰襦裙的上襦可为交领或直领（对襟）。同高腰襦裙相比，齐腰襦裙更为常见。按上襦分，可分为交领齐腰襦裙、直领齐腰襦裙（对襟齐腰襦裙）。按穿着对象分，可分为女式齐腰襦裙、男式齐腰襦裙。
                         </div>
-                    """,
-                    "曳撒": """
+                        """,
+                        unsafe_allow_html=True
+                    )
+                elif prediction == "曳撒":
+                    st.markdown(
+                        """
                         <div style="font-size: 1.4em; padding: 12px;">
                            <br><br>
                            &nbsp;&nbsp;&nbsp;&nbsp;
                            曳撒（yì sǎn ），读法源自蒙古语，为“一色（shǎi）”变音；来自蒙语“质孙（jisum），元代服饰之一。本意是蒙古袍。后在明王朝所吸纳继承，作为骑射服装和宫廷侍卫服装被广泛运用到明朝皇室的日常生活中。明朝人王世贞在《觚不觚集》里讲过“胡服也，其短袖或无袖，而衣中断，其下有横褶，而下腹竖褶之。若袖长则为曳撒“。虽然是胡服，但由于在明代被大量的使用，而在现代的汉服运动中穿着的人众多，所以这里也把它作为一种汉服款式进行解说。
                         </div>
-                    """
-                }
-                if prediction in interpretations:
-                    st.markdown(interpretations[prediction], unsafe_allow_html=True)
+                        """,
+                        unsafe_allow_html=True
+                    )
                 else:
                     st.info(f"暂无 {prediction} 的详细解读", icon="📖")
             else:
@@ -424,54 +441,160 @@ def hanfu_display_module():
         "请选择查看性别",
         options=range(len(gender_options)),
         format_func=lambda x: gender_labels[x],
-        index=st.session_state.current_gender
+        index=st.session_state.current_gender,
+        horizontal=True,
+        key="gender_selection"
     )
+    
     st.session_state.current_gender = gender_index
-
-    selected_gender = gender_options[gender_index]
-    if hanfu_df is not None and 'gender' in hanfu_df.columns:
-        filtered_df = hanfu_df[hanfu_df['gender'] == selected_gender]
-        if not filtered_df.empty:
-            for _, row in filtered_df.iterrows():
-                try:
-                    st.write(f"**{row['name']}**")
-                    if 'description' in row and pd.notna(row['description']):
-                        st.write(row['description'])
-                except Exception as e:
-                    st.warning(f"显示汉服信息时出错: {e}")
-        else:
-            st.info(f"未找到 {selected_gender} 性的汉服信息。")
+    status = gender_options[gender_index]
+    
+    if status == '女':
+        try:
+                    # 确保图像文件存在于给定的路径中
+            Image1 = Image.open('display/曲裾.jpg')
+            Image2 = Image.open('display/直裾.jpg')
+            Image6 = Image.open('display/圆领袍.jpg')
+            Image4 = Image.open('display/齐胸襦裙.jpg')
+            Image5 = Image.open('display/齐腰襦裙.jpg')
+            Image3 = Image.open('display/马面裙.jpg')
+            Image7 = Image.open('display/袄裙.jpg')
+            Image8 = Image.open('display/褙子.jpg')
+            
+            st.markdown("### 女性汉服款式")
+            row1 = st.columns(4)
+            with row1[0]:
+                st.image(Image1, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">曲裾</div>', unsafe_allow_html=True)
+            with row1[1]:
+                st.image(Image2, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">直裾</div>', unsafe_allow_html=True)
+            with row1[2]:
+                st.image(Image6, width=200) 
+                st.markdown('<div style="text-align:center; color: #6b3e00;">圆领袍</div>', unsafe_allow_html=True)
+            with row1[3]:
+                st.image(Image4, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">齐胸襦裙</div>', unsafe_allow_html=True)
+            
+            row2 = st.columns(4)
+            with row2[0]:
+                st.image(Image5, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">齐腰襦裙</div>', unsafe_allow_html=True)
+            with row2[1]:
+                st.image(Image3, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">马面裙</div>', unsafe_allow_html=True)  
+            with row2[2]:
+                st.image(Image7, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">袄裙</div>', unsafe_allow_html=True)
+            with row2[3]:
+                st.image(Image8, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">褙子</div>', unsafe_allow_html=True) 
+            
+            df = pd.DataFrame({
+                'Name': ['曲裾', '直裾', '圆领袍', '齐胸襦裙', '齐腰襦裙', '马面裙', '袄裙', '褙子'],
+                'description': [
+                    '流行于秦汉时期的绕襟深衣，线条优美，端庄大方。',
+                    '直襟的汉服款式，剪裁简洁，行动便利，适合日常穿着。',
+                    '圆领窄袖的袍服，多为官员或士人穿着，庄重大气。',
+                    '唐代流行的高腰裙装，将裙头系于胸上，尽显雍容华贵。',
+                    '裙腰与腰部齐平的传统裙装，清新秀丽，穿着舒适。',
+                    '明代特色裙装，前后有两个裙门，两侧褶裥，端庄稳重。',  
+                    '上衣为袄，下裙搭配的传统服饰，保暖性好，适合秋冬季节。',
+                    '直领对襟的长外衣，两侧开衩，潇洒飘逸，男女皆可穿着。'
+                ]
+            })
+            st.table(df)
+            
+        except Exception as e:
+            st.error(f"图片加载失败: {e}")
+            st.write("请确保图片文件存在且路径正确")
     else:
-        st.error("汉服数据异常或缺少性别列，无法展示。")
+        try:
+            Image4 = Image.open('男曲裾.jpeg')
+            Image5 = Image.open('曳撒.jpg')
+            Image6 = Image.open('圆领袍.jpg')
+            Image7 = Image.open('男直裾.jpg')
+            Image9 = Image.open('男褙子.jpg')
+            
+            st.markdown("### 男性汉服款式")
+            row1 = st.columns(5)
+            with row1[0]:
+                st.image(Image4, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">曲裾</div>', unsafe_allow_html=True)
+            with row1[1]:
+                st.image(Image5, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">曳撒</div>', unsafe_allow_html=True)
+            with row1[2]:
+                st.image(Image6, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">圆领袍</div>', unsafe_allow_html=True)
+            with row1[3]:
+                st.image(Image7, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">直裾</div>', unsafe_allow_html=True)
+            with row1[4]:
+                st.image(Image9, width=200)
+                st.markdown('<div style="text-align:center; color: #6b3e00;">褙子</div>', unsafe_allow_html=True)
+            
+            df = pd.DataFrame({
+                'Name': ['曲裾', '曳撒', '圆领袍', '直裾','褙子'],
+                'description': [
+                    '流行于秦汉时期的绕襟深衣，线条优美，端庄大方。',
+                    '明代典型男装，交领右衽，两侧开衩，下摆有褶裥，兼具威严与飘逸。',
+                    '圆领窄袖的袍服，多为官员或士人穿着，庄重大气。',
+                    '直襟的汉服款式，剪裁简洁，行动便利，适合日常穿着。',
+                    '直领对襟的长外衣，两侧开衩，潇洒飘逸，男女皆可穿着。'
+                ]
+            })
+            st.table(df)
+            
+        except Exception as e:
+            st.error(f"图片加载失败: {e}")
+            st.write("请确保图片文件存在且路径正确")
 
-# 主函数
+# 汉服推荐系统模块
+def hanfu_recommendation_module():
+    st.markdown('<h1 style="text-align:center; font-size:2.5em; color: #6b3e00; font-weight:bold;">汉服推荐系统</h1>', unsafe_allow_html=True)
+    
+    display_random_hanfu()
+    display_recommendations()
+    display_satisfaction()
+    hanfu_display_module()
+
+# 主应用
 def main():
     global ratings_df, hanfu_df
-    init_session_state()
     ratings_df, hanfu_df = load_experiment_data()
-
-    # 侧边导航栏直接显示三个模块
-    st.sidebar.markdown("### 模块选择")
-    if st.sidebar.button("汉服识别"):
-        st.session_state.current_module = "汉服识别"
-    if st.sidebar.button("汉服展示"):
-        st.session_state.current_module = "汉服展示"
-    if st.sidebar.button("汉服评分与推荐"):
-        st.session_state.current_module = "汉服评分与推荐"
-
-    # 如果没有选择模块，显示欢迎信息
-    if 'current_module' not in st.session_state or st.session_state.current_module is None:
-        st.markdown("欢迎使用汉服智能助手，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。")
-    else:
-        if st.session_state.current_module == "汉服识别":
+    init_session_state()
+    
+    with st.sidebar:
+        st.markdown("<h1 style='text-align: center; color: #6b3e00; font-size: 1.8em;'>汉服智能助手</h1>", unsafe_allow_html=True)
+        st.markdown("---")
+        
+        with st.expander("汉服识别系统", expanded=False):
+            if st.button("进入汉服识别", key="nav_recognition"):
+                st.session_state.current_module = "recognition"
+        
+        with st.expander("汉服推荐系统", expanded=False):
+            if st.button("进入汉服推荐", key="nav_recommendation"):
+                st.session_state.current_module = "recommendation"
+    
+    if hasattr(st.session_state, 'current_module'):
+        if st.session_state.current_module == "recognition":
             hanfu_recognition_module()
-        elif st.session_state.current_module == "汉服展示":
-            hanfu_display_module()
-        elif st.session_state.current_module == "汉服评分与推荐":
-            display_random_hanfu()
-            display_recommendations()
-            display_satisfaction()
-
+        elif st.session_state.current_module == "recommendation":
+            hanfu_recommendation_module()
+    else:
+        # 默认显示欢迎页面
+        st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="card" style="text-align:left;">
+            <p style="font-size:1.2em;">欢迎使用汉服智能助手，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</p>
+            <p style="font-size:1.2em;">通过侧边栏导航，您可以：</p>
+            <ul style="text-align:left; margin-left:20px; font-size:1.1em;">
+                <li>使用汉服识别系统上传图片并获取汉服类型及文化解读</li>
+                <li>通过汉服推荐系统获取个性化汉服推荐</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
