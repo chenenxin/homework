@@ -862,11 +862,14 @@ selected_module = st.sidebar.radio(
 )
 
 with st.sidebar:
-    st.subheader("📌 汉服数据库")
+    # 使用markdown和HTML/CSS放大标题字体
+    st.markdown('<h3 style="font-size:24px; color: #6b3e00;">📌 汉服数据库</h3>', unsafe_allow_html=True)
+    
     if hanfu_df is not None:
         st.write(f"📂 收录热门汉服款式总数：{len(hanfu_df)}")
     else:
         st.write("📂 汉服数据加载失败")
+        
     if ratings_df is not None:
         st.write(f"⭐ 用户评分总数：{len(ratings_df)}")
     else:
