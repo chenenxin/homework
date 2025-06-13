@@ -386,6 +386,10 @@ def hanfu_recognition_module():
             st.info("请上传汉服图片以获取文化解读", icon="📖")
         st.markdown('</div>', unsafe_allow_html=True)
 
+import streamlit as st
+import pandas as pd
+import random
+
 # 初始化会话状态
 def init_session_state():
     if 'app_initialized' not in st.session_state:
@@ -464,68 +468,102 @@ def display_random_hanfu():
                 st.write(f"**{name}**")
                 
                 # 评分范围标签
-                rating_range_html = """
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9em;">
-                    <span style="color: #6b3e00;">1分</span>
-                    <span style="color: #6b3e00;">3分</span>
-                    <span style="color: #6b3e00;">5分</span>
+                rating_labels_html = """
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9em; color: #6b3e00;">
+                    <span>1分</span>
+                    <span>3分</span>
+                    <span>5分</span>
                 </div>
                 """
-                st.markdown(rating_range_html, unsafe_allow_html=True)
+                st.markdown(rating_labels_html, unsafe_allow_html=True)
                 
                 # 评分滑块
-                default_value = 5
+                default_value = 3  # 默认值设为 3 分
                 if item_id in st.session_state.user_ratings:
                     default_value = st.session_state.user_ratings[item_id]
                 
                 # 自定义滑块样式
                 st.markdown("""
                 <style>
-                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"] {
+                    /* 滑块轨道样式 */
+                    div.stSlider > div[data-baseweb="slider"] > div {
+                        height: 8px;
+                        background-color: #eee;
+                        border-radius: 4px;
+                    }
+                    /* 滑块thumb样式 */
+                    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"] {
                         background-color: #6b3e00;
-                        box-shadow: 0 0 0 1px #6b3e00;
+                        border: none;
+                        width: 20px;
+                        height: 20px;
+                        margin-top: -6px;
+                        border-radius: 50%;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
                     }
-                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]:focus {
-                        box-shadow: 0 0 0 1px #6b3e00, 0 0 0 0.2rem rgba(107, 62, 0, 0.25);
+                    /* 滑块focus样式 */
+                    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]:focus {
+                        box-shadow: 0 0 0 2px rgba(107, 62, 0, 0.2);
+                        outline: none;
                     }
-                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]::after {
+                    /* 评分值显示 */
+                    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]::after {
                         content: attr(aria-valuenow);
                         position: absolute;
-                        bottom: -20px;
+                        bottom: -24px;
                         left: 50%;
                         transform: translateX(-50%);
-                        font-size: 0.8em;
+                        font-size: 0.85em;
                         color: #6b3e00;
+                        background-color: #fff;
+                        padding: 2px 6px;
+                        border: 1px solid #6b3e00;
+                        border-radius: 4px;
                     }
                 </style>
                 """, unsafe_allow_html=True)
                 
+                # 滑块组件
                 rating = st.slider(
-                    "",
+                    "",  # 滑块标题为空，通过自定义标签显示
                     min_value=1,
                     max_value=5,
                     value=default_value,
                     step=1,
                     key=f"slider_rating_{item_id}_{i}",
-                    format="%d分"
+                    format="%d分"  # 格式化显示评分值
                 )
                 
+                # 存储评分
                 st.session_state.user_ratings[item_id] = rating
-
-
+        
+        # 提交按钮
         submitted = st.form_submit_button("提交评分", type="primary")
         if submitted:
             if len(st.session_state.user_ratings) < len(valid_selected):
-                st.warning("请为所有汉服评分")
+                st.warning("请为所有汉服评分！")
             else:
                 st.success("评分已提交！")
-                st.write("您的评分如下:")
+                # 显示用户评分
+                st.write("您的评分如下：")
                 for item_id, rating in st.session_state.user_ratings.items():
                     try:
                         name = hanfu_df.loc[hanfu_df['item_id'] == item_id, 'name'].iloc[0]
                     except:
                         name = f"汉服 (ID: {item_id})"
-                    st.write(f"{name}: {rating}分")
+                    st.write(f"- {name}: {rating}分")
+
+# 模拟汉服数据
+hanfu_df = pd.DataFrame({
+    'item_id': [1, 2, 3],
+    'name': ['曲裾', '圆领袍', '直裾']
+})
+
+# 初始化会话状态
+init_session_state()
+
+# 显示评分界面
+display_random_hanfu()
 
 # 显示推荐结果
 def display_recommendations():
