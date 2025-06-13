@@ -88,7 +88,7 @@ st.markdown("""
         border-radius: 8px;
     }
     
-    /* 自定义按钮样式 */
+/* 自定义按钮样式 */
     button.stButton {
         /* 未点击状态 */
         background-color: #d4a976;
@@ -112,7 +112,7 @@ st.markdown("""
     
     button.stButton:active {
         /* 点击状态 */
-        background-image: linear-gradient(145deg, #a67c52, #8c6845);
+        background-image: linear-gradient(145deg, #8c6845, #6b4e33);
         box-shadow: inset 2px 2px 5px rgba(107, 62, 0, 0.3);
         transform: translateY(1px);
     }
@@ -181,32 +181,16 @@ st.markdown("""
     }
     
     /* 评分滑块容器样式 */
-    .rating-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    
-    /* 评分范围标签样式 */
-    .rating-labels {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        margin-bottom: 10px;
-        font-size: 0.9em;
-        color: #6b3e00;
-    }
-    
-    /* 滑块样式 */
     div.stSlider {
         width: 100%;
+        margin: 10px 0;
     }
     
     div.stSlider > div[data-baseweb="slider"] > div {
         height: 8px;
         background-color: #eee;
         border-radius: 4px;
+        transform: translateY(50%);
     }
     
     div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"] {
@@ -214,18 +198,12 @@ st.markdown("""
         border: none;
         width: 20px;
         height: 20px;
-        margin-top: -6px;
+        margin-top: -10px;
         border-radius: 50%;
         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         transition: all 0.2s;
     }
     
-    div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]:focus {
-        box-shadow: 0 0 0 2px rgba(107, 62, 0, 0.2);
-        outline: none;
-    }
-    
-    /* 评分值显示（默认隐藏） */
     div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"]::after {
         content: "";
         position: absolute;
@@ -243,7 +221,6 @@ st.markdown("""
         transition: opacity 0.2s;
     }
     
-    /* 拖动时显示评分值 */
     div.stSlider > div[data-baseweb="slider"] > div > div[role="slider"].dragging::after {
         content: attr(aria-valuenow) "分";
         opacity: 1;
