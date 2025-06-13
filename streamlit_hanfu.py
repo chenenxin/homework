@@ -186,7 +186,7 @@ div[data-testid="stRadio"] input:checked + label {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 /* 评分范围标签样式（隐藏默认的 1分、3分、5分 文本显示，若需要保留样式布局仅隐藏文字，可调整 color 为 transparent 等 ）*/
