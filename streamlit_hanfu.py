@@ -60,6 +60,43 @@ st.markdown("""
         max-width: 50%;
         border-radius: 8px;
     }
+    /* 修改按钮样式 */
+    .stButton>button {
+        background: linear-gradient(145deg, #a67c52, #916b47);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .stButton>button:hover {
+        background: linear-gradient(145deg, #916b47, #7d5b3a);
+    }
+    .stButton>button:active {
+        background: linear-gradient(145deg, #7d5b3a, #694a2e);
+    }
+    /* 修改侧边导航栏按钮样式 */
+    [data-testid="stSidebarNav"] ul li a {
+        display: block;
+        background: linear-gradient(145deg, #fffaf0, #f5f0e1);
+        color: #6b3e00;
+        border: 1px solid #e8dcc3;
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+        text-decoration: none;
+    }
+    [data-testid="stSidebarNav"] ul li a:hover {
+        background: linear-gradient(145deg, #f5f0e1, #ede4d1);
+    }
+    [data-testid="stSidebarNav"] ul li a:active {
+        background: linear-gradient(145deg, #ede4d1, #e4dac6);
+    }
+    [data-testid="stSidebarNav"] ul li a[aria-current="page"] {
+        background: linear-gradient(145deg, #a67c52, #916b47);
+        color: white;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -438,11 +475,9 @@ def hanfu_display_module():
                 except Exception as e:
                     st.error(f"显示汉服信息时出错: {e}")
 
-# 汉服评分与推荐模块
-def hanfu_rating_recommendation_module():
-    display_random_hanfu()
-    display_recommendations()
-    display_satisfaction()
+# 侧边导航栏
+module_names = ["汉服识别", "汉服评分与推荐", "汉服展示"]
+selected_module = st.sidebar.radio("选择模块", module_names)
 
 # 加载数据
 ratings_df, hanfu_df = load_experiment_data()
@@ -450,29 +485,12 @@ ratings_df, hanfu_df = load_experiment_data()
 # 初始化会话状态
 init_session_state()
 
-# 侧边导航栏
-st.sidebar.title("汉服智能小助手")
-selected_module = st.sidebar.radio(
-    "选择模块",
-    ["首页", "汉服识别", "汉服展示", "汉服评分与推荐"]
-)
-
-# 显示首页信息
-if selected_module == "首页":
-    st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
-    st.markdown("""
-    <div class="card" style="text-align:left;">
-        <p style="font-size:1.2em;">欢迎使用汉服智能助手，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</p>
-        <p style="font-size:1.2em;">通过侧边栏导航，您可以：</p>
-        <ul style="text-align:left; margin-left:20px; font-size:1.1em;">
-            <li>使用汉服识别系统上传图片并获取汉服类型及文化解读</li>
-            <li>通过汉服推荐系统获取个性化汉服推荐</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
-elif selected_module == "汉服识别":
+# 根据选择的模块显示相应内容
+if selected_module == "汉服识别":
     hanfu_recognition_module()
+elif selected_module == "汉服评分与推荐":
+    display_random_hanfu()
+    display_recommendations()
+    display_satisfaction()
 elif selected_module == "汉服展示":
     hanfu_display_module()
-elif selected_module == "汉服评分与推荐":
-    hanfu_rating_recommendation_module()
