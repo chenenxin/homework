@@ -166,7 +166,7 @@ st.markdown("""
         transform: scale(1.1);
     }
     
-    /* 隐藏评分按钮上方的文字 */
+    /* 隐藏评分（选择模块）按钮上方的文字 */
     div[data-testid="stRadio"] > label {
         display: none;
     }
@@ -702,7 +702,6 @@ init_session_state()
 # 侧边导航栏
 st.sidebar.title("汉服智能小助手")
 selected_module = st.sidebar.radio(
-    "选择模块",
     ["首页", "汉服识别", "汉服展示", "汉服评分与推荐"]
 )
 
