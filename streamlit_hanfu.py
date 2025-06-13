@@ -131,7 +131,6 @@ st.markdown("""
         background-image: linear-gradient(145deg, #bcaa90, #a89880);
     }
     
-    
     /* 已点击按钮的特殊样式 */
     button.stButton.clicked {
         background-image: linear-gradient(145deg, #8c6845, #6b4e33);
@@ -160,7 +159,7 @@ button[data-testid="stFormSubmitButton"]:active {
 div[data-testid="stRadio"] > div {
     display: flex;
     justify-content: center;
-    gap: 4px;
+    gap: 5px;
 }
 
 div[data-testid="stRadio"] label {
