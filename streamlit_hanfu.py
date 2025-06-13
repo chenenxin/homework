@@ -863,7 +863,7 @@ selected_module = st.sidebar.radio(
 
 with st.sidebar:
     # 使用markdown和HTML/CSS放大标题字体
-    st.markdown('<h3 style="font-size:24px; color: #6b3e00;">📌 汉服数据库</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="font-size:24px;">📌 汉服数据库</h3>', unsafe_allow_html=True)
     
     if hanfu_df is not None:
         st.write(f"📂 收录热门汉服款式总数：{len(hanfu_df)}")
