@@ -866,7 +866,7 @@ with st.sidebar:
     st.markdown('<h3 style="font-size:24px;">📌 汉服数据库</h3>', unsafe_allow_html=True)
     
     if hanfu_df is not None:
-        st.write(f"📂 收录热门汉服款式总数：{len(hanfu_df)}")
+        st.markdown(f'<p style="font-size:20px;">📂 收录热门汉服款式总数：{len(hanfu_df)}</p>', unsafe_allow_html=True)
     else:
         st.write("📂 汉服数据加载失败")
     st.markdown('<h4 style="font-size:18px;font-weight:normal;font-style: italic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;马面裙&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;圆领袍</h4>', unsafe_allow_html=True)
@@ -875,7 +875,7 @@ with st.sidebar:
     st.markdown('<h4 style="font-size:18px;font-weight:normal;font-style: italic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;齐胸襦裙&nbsp;&nbsp;&nbsp;&nbsp;曲裾</h4>', unsafe_allow_html=True)  
     st.markdown('<h4 style="font-size:18px;font-weight:normal;font-style: italic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;齐腰襦裙</h4>', unsafe_allow_html=True)      
     if ratings_df is not None:
-        st.write(f"⭐ 用户评分总数：{len(ratings_df)}")
+        st.markdown(f'<p style="font-size:20px;">⭐ 用户评分总数：{len(ratings_df)}</p>', unsafe_allow_html=True)
     else:
         st.write("⭐ 用户评分数据加载失败")
     
