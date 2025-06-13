@@ -130,14 +130,15 @@ st.markdown("""
     [data-testid="stSidebar"] button.stButton:active {
         background-image: linear-gradient(145deg, #bcaa90, #a89880);
     }
-    
-    /* 已点击按钮的特殊样式 */
+        /* 已点击按钮的特殊样式 */
     button.stButton.clicked {
         background-image: linear-gradient(145deg, #8c6845, #6b4e33);
         box-shadow: inset 2px 2px 5px rgba(107, 62, 0, 0.5);
         transform: translateY(1px);
         color: #f8f3e9;
     }
+    
+
     
 
 /* 表单提交按钮 */
@@ -601,30 +602,9 @@ def display_recommendations():
     
     # 为按钮添加唯一ID以跟踪状态
     button_key = "get_recommendations_button"
-    
-    # 初始化按钮状态
-    if 'button_clicked' not in st.session_state:
-        st.session_state.button_clicked = False
-    
-    # 自定义按钮样式 - 点击时为红色，未点击时为原色
-    if st.session_state.button_clicked:
-        button_style = """
-        <style>
-        div.stButton > button:first-child {
-            background-color: #FF4B4B;
-            color: white;
-        }
-        </style>
-        """
-    else:
-        button_style = ""
-    
-    st.markdown(button_style, unsafe_allow_html=True)
-    
-    # 创建按钮并跟踪点击状态
     if st.button("获取个性化推荐", type="primary", key=button_key):
-        # 记录按钮状态为已点击
-        st.session_state.button_clicked = True
+        # 记录按钮状态
+        st.session_state.button_states[button_key] = True
         
         if len(st.session_state.user_ratings) < 3:
             st.warning("请先为 3 个汉服评分")
@@ -655,8 +635,6 @@ def display_recommendations():
                     st.warning(f"处理推荐项 {item_id} 时出错: {e}")
             st.session_state.recommendations = formatted_recs
             st.success("推荐生成成功！")
-    
-    # 显示推荐结果部分保持不变
     if 'recommendations' in st.session_state and st.session_state.recommendations:
         st.subheader("为您推荐汉服")
         for idx, rec in enumerate(st.session_state.recommendations):
@@ -689,7 +667,6 @@ def display_recommendations():
                     st.session_state.rec_ratings[rec['item_id']] = float(rating_options[rating_index])
             except Exception as e:
                 st.error(f"显示推荐项时出错: {e}")
-    
 
 # 计算满意度
 def calculate_satisfaction(ratings):
