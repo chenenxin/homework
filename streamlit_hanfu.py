@@ -385,21 +385,6 @@ def hanfu_recognition_module():
         else:
             st.info("请上传汉服图片以获取文化解读", icon="📖")
         st.markdown('</div>', unsafe_allow_html=True)
-
-# 初始化会话状态
-def init_session_state():
-    if 'app_initialized' not in st.session_state:
-        st.session_state.app_initialized = True
-        st.session_state.current_step = 1
-        st.session_state.selected_hanfu = []
-        st.session_state.user_ratings = {}
-        st.session_state.recommendations = []
-        st.session_state.rec_ratings = {}
-        st.session_state.rating_range = (1, 5)
-        st.session_state.satisfaction = None
-        st.session_state.current_module = None
-        st.session_state.button_states = {}  # 用于存储按钮点击状态
-
 # 显示随机汉服并收集评分
 def display_random_hanfu():
     global hanfu_df
@@ -434,7 +419,7 @@ def display_random_hanfu():
             return
         st.session_state.user_ratings = {}
 
-    st.markdown('<h1 style="text-align:left; color: #6b3e00;">请为以下汉服评分</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 style="text-align:left; color: #6b3e00;">👉🏻请为以下汉服评分</h1>', unsafe_allow_html=True)
     
     form_key = f"hanfu_rating_form_{hash(tuple(st.session_state.selected_hanfu))}"
     with st.form(key=form_key):
@@ -462,23 +447,56 @@ def display_random_hanfu():
             
             with cols[i]:
                 st.write(f"**{name}**")
-                rating_options = list(range(1, 6))
-                rating_labels = [f"{i}分" for i in rating_options]
                 
-                default_idx = 4
+                # 评分范围标签
+                rating_range_html = """
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9em;">
+                    <span style="color: #6b3e00;">1分</span>
+                    <span style="color: #6b3e00;">3分</span>
+                    <span style="color: #6b3e00;">5分</span>
+                </div>
+                """
+                st.markdown(rating_range_html, unsafe_allow_html=True)
+                
+                # 评分滑块
+                default_value = 5
                 if item_id in st.session_state.user_ratings:
-                    default_idx = rating_options.index(st.session_state.user_ratings[item_id])
+                    default_value = st.session_state.user_ratings[item_id]
                 
-                rating_index = st.radio(
-                    f"为汉服评分",
-                    options=range(len(rating_options)),
-                    format_func=lambda x: rating_labels[x],
-                    index=default_idx,
-                    key=f"rating_{item_id}_{i}",
-                    horizontal=True
+                # 自定义滑块样式
+                st.markdown("""
+                <style>
+                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"] {
+                        background-color: #6b3e00;
+                        box-shadow: 0 0 0 1px #6b3e00;
+                    }
+                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]:focus {
+                        box-shadow: 0 0 0 1px #6b3e00, 0 0 0 0.2rem rgba(107, 62, 0, 0.25);
+                    }
+                    div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]::after {
+                        content: attr(aria-valuenow);
+                        position: absolute;
+                        bottom: -20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-size: 0.8em;
+                        color: #6b3e00;
+                    }
+                </style>
+                """, unsafe_allow_html=True)
+                
+                rating = st.slider(
+                    "",
+                    min_value=1,
+                    max_value=5,
+                    value=default_value,
+                    step=1,
+                    key=f"slider_rating_{item_id}_{i}",
+                    format="%d分"
                 )
                 
-                st.session_state.user_ratings[item_id] = rating_options[rating_index]
+                st.session_state.user_ratings[item_id] = rating
+
 
         submitted = st.form_submit_button("提交评分", type="primary")
         if submitted:
