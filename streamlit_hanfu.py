@@ -112,7 +112,7 @@ st.markdown("""
     
     button.stButton:active {
         /* 点击状态 */
-        background-image: linear-gradient(145deg, #a67c52, #8c6845);
+        background-image: linear-gradient(145deg, #e0b98e, #bf956b);
         box-shadow: inset 2px 2px 5px rgba(107, 62, 0, 0.3);
         transform: translateY(1px);
     }
