@@ -869,7 +869,7 @@ with st.sidebar:
         st.write(f"📂 收录热门汉服款式总数：{len(hanfu_df)}")
     else:
         st.write("📂 汉服数据加载失败")
-        
+    st.markdown('<h3 style="font-size:12px;">马面裙</h3>', unsafe_allow_html=True)    
     if ratings_df is not None:
         st.write(f"⭐ 用户评分总数：{len(ratings_df)}")
     else:
