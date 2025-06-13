@@ -692,6 +692,9 @@ def hanfu_display_module():
     
     status = st.selectbox("请选择性别", ('女', '男'))
     
+    # 统一图片宽度（可根据需要调整）
+    image_width = 250  # 所有图片统一使用这个宽度
+    
     if status == '女':
         # 示例图片路径（请替换为实际路径）
         try:
@@ -708,30 +711,30 @@ def hanfu_display_module():
             st.markdown("### 女性汉服款式")
             row1 = st.columns(4)
             with row1[0]:
-                st.image(Image1, width=200)
+                st.image(Image1, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">曲裾</div>', unsafe_allow_html=True)
             with row1[1]:
-                st.image(Image2, width=200)
+                st.image(Image2, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">直裾</div>', unsafe_allow_html=True)
             with row1[2]:
-                st.image(Image6, width=200) 
+                st.image(Image6, width=image_width) 
                 st.markdown('<div style="text-align:center; color: #6b3e00;">圆领袍</div>', unsafe_allow_html=True)
             with row1[3]:
-                st.image(Image4, width=200)
+                st.image(Image4, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">齐胸襦裙</div>', unsafe_allow_html=True)
             
             row2 = st.columns(4)
             with row2[0]:
-                st.image(Image5, width=200)
+                st.image(Image5, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">齐腰襦裙</div>', unsafe_allow_html=True)
             with row2[1]:
-                st.image(Image3, width=200)
+                st.image(Image3, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">马面裙</div>', unsafe_allow_html=True)  
             with row2[2]:
-                st.image(Image7, width=200)
+                st.image(Image7, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">袄裙</div>', unsafe_allow_html=True)
             with row2[3]:
-                st.image(Image8, width=200)
+                st.image(Image8, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">褙子</div>', unsafe_allow_html=True) 
             
             # 展示表格数据
@@ -766,19 +769,19 @@ def hanfu_display_module():
             st.markdown("### 男性汉服款式")
             row1 = st.columns(5)
             with row1[0]:
-                st.image(Image4, width=200)
+                st.image(Image4, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">曲裾</div>', unsafe_allow_html=True)
             with row1[1]:
-                st.image(Image5, width=200)
+                st.image(Image5, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">曳撒</div>', unsafe_allow_html=True)
             with row1[2]:
-                st.image(Image6, width=200)
+                st.image(Image6, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">圆领袍</div>', unsafe_allow_html=True)
             with row1[3]:
-                st.image(Image7, width=200)
+                st.image(Image7, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">直裾</div>', unsafe_allow_html=True)
             with row1[4]:
-                st.image(Image9, width=200)
+                st.image(Image9, width=image_width)
                 st.markdown('<div style="text-align:center; color: #6b3e00;">褙子</div>', unsafe_allow_html=True)
             
             # 展示表格数据
