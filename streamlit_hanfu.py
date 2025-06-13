@@ -749,11 +749,12 @@ if selected_module == "🏠首页":
     st.markdown('<h1 style="text-align:center; font-size:3.5em; color: #6b3e00; font-weight:bold;">🙌🏻汉服识别和推荐系统</h1>', unsafe_allow_html=True)
     st.markdown("""
     <div class="card" style="text-align:left;">
-        <p style="font-size:1.2em;">欢迎使用汉服智能助手，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</p>
+        <p style="font-size:1.2em;">欢迎使用汉服智能小助手🥳🎉，这是一个集汉服识别、文化解读与个性化推荐于一体的系统。</p>
         <p style="font-size:1.2em;">通过侧边栏导航，您可以：</p>
         <ul style="text-align:left; margin-left:20px; font-size:1.1em;">
-            <li>使用汉服识别系统上传图片并获取汉服类型及文化解读</li>
-            <li>通过汉服推荐系统获取个性化汉服推荐</li>
+            <li>📍使用汉服识别系统上传图片并获取汉服类型及文化解读</li>
+            <li>📍通过汉服推荐系统获取个性化汉服推荐</li>
+            <li>🪩浏览精选汉服</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
